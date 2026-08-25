@@ -35,7 +35,7 @@ jobs:
       - name: Fail if a key was inlined into the bundle
         run: node scripts/check-no-secrets.mjs
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
