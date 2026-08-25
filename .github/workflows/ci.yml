@@ -65,7 +65,7 @@ jobs:
           # gitleaks needs the whole history, not just the tip. A key committed
           # once and removed later is still a leaked key.
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
+      - uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
