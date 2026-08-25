@@ -1,0 +1,13 @@
+// Deliberate violations. This file is not compiled or bundled; it exists so
+// tests/unit/lint-rules.test.ts can prove the engine-purity rule actually
+// fires. A rule nobody has seen fail is a rule nobody should trust.
+import { something } from '../../../src/config/settings';
+
+export function impure() {
+  const now = Date.now();
+  const el = document.getElementById('x');
+  if (el) el.innerHTML = '<b>nope</b>';
+  void fetch('https://example.com');
+  void localStorage.getItem('k');
+  return now + Math.random() + Number(something);
+}

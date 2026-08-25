@@ -1,0 +1,29 @@
+{
+  "name": "lead-time",
+  "description": "Thirty minutes' notice is required, so 19:15 refuses when the clock reads 19:00.",
+  "today": "2026-08-25",
+  "nowTime": "19:00",
+  "seeded": false,
+  "turns": [
+    "a table for two tonight",
+    "quarter past seven",
+    "half eight",
+    "under Lal",
+    "9820011251",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-25",
+      "time": "20:30"
+    },
+    "rejectionReasons": [
+      "time_before_lead_time"
+    ],
+    "lineKeys": [
+      "reject_time_hours",
+      "booked"
+    ]
+  }
+}

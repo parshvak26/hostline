@@ -1,0 +1,23 @@
+{
+  "name": "unparseable-reprompt",
+  "description": "§4.3: a turn nobody can parse gets a re-prompt rather than a guess, and the conversation recovers.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "xxxxx yyyyy zzzzz wwwww vvvvv uuuuu ttttt",
+    "friday",
+    "half seven",
+    "two of us",
+    "under Rao",
+    "9820011235",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "lineKeys": [
+      "not_understood",
+      "booked"
+    ]
+  }
+}

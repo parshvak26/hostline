@@ -1,0 +1,24 @@
+{
+  "name": "weekend-ambiguity",
+  "description": "'This weekend' is two days, so the parser refuses to pick and the agent asks.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table for two this weekend",
+    "saturday",
+    "half seven",
+    "under Gupta",
+    "9820011261",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-29"
+    },
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

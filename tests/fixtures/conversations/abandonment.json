@@ -1,0 +1,18 @@
+{
+  "name": "abandonment",
+  "description": "§4.3: 'never mind' ends the conversation as abandoned with nothing written.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on friday",
+    "actually never mind"
+  ],
+  "expect": {
+    "outcome": "abandoned",
+    "lineKeys": [
+      "abandoned"
+    ],
+    "minAgentTurns": 1
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "lunch-booking",
+  "description": "Friday's first service window: a bare 'one o'clock' resolves into lunch rather than into the small hours.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on friday",
+    "one o'clock",
+    "under Datta",
+    "9820011242",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "13:00"
+    },
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

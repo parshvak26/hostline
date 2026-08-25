@@ -1,0 +1,181 @@
+/*
+ * Page furniture: the hero, the footer, and the small text controls that read
+ * as links.
+ *
+ * The hero is the whole first impression, and plan §5.2 is blunt about it — it
+ * "must have more whitespace than feels comfortable", because that restraint is
+ * what separates designed from generated. Most of this file is space.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-6) var(--space-7);
+}
+
+/*
+ * A flex item's `min-width` defaults to `auto`, which means "never shrink below
+ * your content's minimum". That default is what pushed the transcript to 439px
+ * inside a 375px phone and put a horizontal scrollbar on the page — the grid
+ * inside was willing to shrink, but this outer flex item was not letting it.
+ *
+ * Plan §14 requires 375px and 200% zoom without horizontal scrolling, and this
+ * one line is most of what delivers it.
+ */
+.page > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+/* ------------------------------------------------------------------ hero -- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-block: var(--space-5) var(--space-6);
+}
+
+.hero .restaurant-name {
+  margin-block-end: var(--space-1);
+}
+
+.hero .restaurant-meta {
+  margin-block-end: var(--space-7);
+}
+
+.hero .headline {
+  max-inline-size: 16ch;
+  margin-block-end: var(--space-3);
+}
+
+.hero .lede {
+  margin-block-end: var(--space-5);
+}
+
+.hero__action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  inline-size: 100%;
+}
+
+.hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: baseline;
+  margin-block-start: var(--space-1);
+  color: var(--ink-soft);
+  font-size: var(--size-sm);
+}
+
+/*
+ * A button that reads as a link.
+ *
+ * These are genuinely buttons — they toggle something on this page rather than
+ * navigating — so they stay buttons for assistive technology and get the
+ * appearance of the thing they behave like. Underlined rather than coloured, so
+ * they are distinguishable without relying on hue (plan §14).
+ */
+.linkish {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-size: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.linkish:hover {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+}
+
+.privacy-note {
+  max-inline-size: var(--measure);
+  margin-block-start: var(--space-3);
+  padding: var(--space-3);
+  border-inline-start: 2px solid var(--rule);
+  background-color: var(--paper-deep);
+}
+
+.privacy-note > * + * {
+  margin-block-start: var(--space-2);
+}
+
+/* ---------------------------------------------------------------- footer -- */
+
+.footer {
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-5) var(--space-3) var(--space-6);
+  border-block-start: var(--hairline) solid var(--rule);
+  color: var(--ink-soft);
+}
+
+.footer > * + * {
+  margin-block-start: var(--space-1);
+}
+
+@media (width >= 48rem) {
+  .footer {
+    padding-inline: var(--space-5);
+  }
+}
+
+/* ------------------------------------------------------------- sections -- */
+
+.conversation,
+.diary,
+.how-it-works {
+  scroll-margin-block-start: var(--space-4);
+}
+
+/*
+ * On a short phone the restraint has to give a little.
+ *
+ * Plan §6 requires the Talk button above the fold at 375x667, and the generous
+ * desktop rhythm pushes it to the very bottom edge there. The whitespace is the
+ * point, but a call to action the visitor has to scroll for is a worse outcome
+ * than a slightly tighter hero.
+ */
+@media (width < 30rem), (height < 44rem) {
+  .page {
+    gap: var(--space-6);
+    padding-block: var(--space-3) var(--space-6);
+  }
+
+  .hero {
+    padding-block: var(--space-2) var(--space-4);
+  }
+
+  .hero .restaurant-meta {
+    margin-block-end: var(--space-4);
+  }
+
+  .hero .headline {
+    margin-block-end: var(--space-2);
+  }
+
+  .hero .lede {
+    font-size: var(--size-base);
+    margin-block-end: var(--space-3);
+  }
+}
+
+/*
+ * The hero should own the first screen on a laptop. Not enforced with a fixed
+ * height — that breaks at 200% zoom and on short windows — but by giving it
+ * enough room that nothing else competes for attention above the fold.
+ */
+@media (width >= 64rem) and (height >= 40rem) {
+  .hero {
+    padding-block: var(--space-7) var(--space-8);
+  }
+}

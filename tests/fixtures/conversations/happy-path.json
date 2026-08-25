@@ -1,0 +1,30 @@
+{
+  "name": "happy-path",
+  "description": "The shortest real booking: one detail per turn, nothing refused.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for four on friday",
+    "seven pm",
+    "Karani",
+    "9820011447",
+    "yes please"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "19:00",
+      "partySize": 4,
+      "name": "Karani",
+      "phone": "9820011447"
+    },
+    "lineKeys": [
+      "greeting",
+      "readback",
+      "booked"
+    ],
+    "minAgentTurns": 4
+  }
+}

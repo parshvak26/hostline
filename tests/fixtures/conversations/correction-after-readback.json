@@ -1,0 +1,35 @@
+{
+  "name": "correction-after-readback",
+  "description": "A party-size change after the read-back voids the confirmation, re-checks availability at the new size, and asks again.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": true,
+  "turns": [
+    "hi, do you have a table for four on friday",
+    "seven pm",
+    "quarter past eight then",
+    "it's under Karani",
+    "nine eight two zero zero double one four four seven",
+    "actually make it five",
+    "half past eight",
+    "yes please"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "20:30",
+      "partySize": 5,
+      "name": "Karani",
+      "phone": "9820011447"
+    },
+    "rejectionReasons": [
+      "no_availability"
+    ],
+    "lineKeys": [
+      "readback",
+      "booked"
+    ],
+    "minAgentTurns": 7
+  }
+}

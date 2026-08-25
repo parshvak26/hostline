@@ -1,0 +1,123 @@
+/* The confirmation card (T-103).
+
+   The one genuinely good moment in the flow, so it is given room rather than
+   decoration: a wider gutter than anything else on the page, the display serif
+   for the restaurant's half of the sentence, and the accent spent on exactly
+   two things — the rule along the top and the reference itself. */
+
+.confirmation {
+  max-inline-size: var(--measure);
+  padding: var(--space-5) var(--space-4);
+  border: var(--hairline) solid var(--rule);
+  border-block-start: 2px solid var(--accent);
+  border-radius: var(--radius);
+  background-color: var(--paper-deep);
+}
+
+/* Explicit, because the rule above would otherwise beat the UA's [hidden]. */
+.confirmation[hidden] {
+  display: none;
+}
+
+.confirmation__eyebrow {
+  margin-block-end: var(--space-2);
+  color: var(--accent);
+}
+
+.confirmation__title {
+  font-size: var(--size-xl);
+  font-weight: 400;
+}
+
+.confirmation__lead {
+  max-inline-size: 46ch;
+  margin-block-start: var(--space-1);
+  color: var(--ink-soft);
+}
+
+/* Label and value on one row at reading width, stacked when there is not room
+   for both. `max-content` keeps the labels aligned without a magic number. */
+.confirmation__summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-1) var(--space-3);
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: var(--hairline) solid var(--rule);
+}
+
+.confirmation__label {
+  font-size: var(--size-sm);
+  color: var(--ink-soft);
+}
+
+.confirmation__value {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.confirmation__reference-block {
+  margin-block-start: var(--space-4);
+  padding-block: var(--space-3);
+  border-block: var(--hairline) solid var(--rule);
+}
+
+.confirmation__reference-label {
+  color: var(--ink-soft);
+}
+
+/* Read aloud as often as it is read, so it is set to be spelled: mono, large,
+   and spaced far enough apart that no two characters read as one. The negative
+   end margin removes the trailing gap letter-spacing adds after the last
+   glyph, which would otherwise sit the code slightly left of the labels. */
+.confirmation__reference {
+  margin-block-start: var(--space-1);
+  margin-inline-end: -0.28em;
+  font-family: var(--font-mono);
+  font-size: var(--size-2xl);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--accent);
+  letter-spacing: 0.28em;
+}
+
+.confirmation__note {
+  margin-block-start: var(--space-2);
+  font-size: var(--size-sm);
+  color: var(--ink-soft);
+}
+
+.confirmation__cta {
+  margin-block-start: var(--space-4);
+  padding: var(--space-1) var(--space-3);
+  border: var(--hairline) solid var(--ink);
+  border-radius: var(--radius-button);
+  background-color: transparent;
+  font-size: var(--size-base);
+  cursor: pointer;
+  transition: background-color var(--dur-quick) var(--ease), color var(--dur-quick) var(--ease);
+}
+
+.confirmation__cta:hover {
+  background-color: var(--ink);
+  color: var(--paper);
+}
+
+@media (width <= 40rem) {
+  .confirmation {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .confirmation__summary {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .confirmation__label {
+    margin-block-start: var(--space-2);
+  }
+
+  .confirmation__reference {
+    font-size: var(--size-xl);
+  }
+}

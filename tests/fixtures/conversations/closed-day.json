@@ -1,0 +1,28 @@
+{
+  "name": "closed-day",
+  "description": "§4.3: Monday is closed. The refusal names the day and the agent asks again.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on monday",
+    "tomorrow",
+    "half seven",
+    "under Mehta",
+    "9820011234",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-26"
+    },
+    "rejectionReasons": [
+      "date_closed_day"
+    ],
+    "lineKeys": [
+      "reject_date_closed",
+      "booked"
+    ]
+  }
+}

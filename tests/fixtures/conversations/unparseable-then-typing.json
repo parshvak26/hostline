@@ -1,0 +1,20 @@
+{
+  "name": "unparseable-then-typing",
+  "description": "§4.3: after two unparseable turns the agent should offer typing, and after three switch to it.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "xxxxx yyyyy zzzzz wwwww vvvvv uuuuu ttttt",
+    "qqqqq wwwww eeeee rrrrr ttttt yyyyy uuuuu",
+    "mmmmm nnnnn bbbbb vvvvv ccccc xxxxx zzzzz"
+  ],
+  "expect": {
+    "outcome": "incomplete",
+    "lineKeys": [
+      "not_understood",
+      "not_understood_offer_typing",
+      "switching_to_typing"
+    ]
+  }
+}

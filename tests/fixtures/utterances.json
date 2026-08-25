@@ -1,0 +1,959 @@
+[
+  {
+    "text": "friday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    },
+    "note": "The near Friday. Bare weekday means the next one."
+  },
+  {
+    "text": "next Friday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-09-04"
+    },
+    "note": "House rule: 'next <weekday>' is the following calendar week, not the near one."
+  },
+  {
+    "text": "this friday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "this coming saturday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-29"
+    }
+  },
+  {
+    "text": "tomorrow",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-26"
+    }
+  },
+  {
+    "text": "tomorrow evening",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-26"
+    },
+    "note": "The part-of-day is swallowed by the date, not turned into a time."
+  },
+  {
+    "text": "tonight",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-25"
+    }
+  },
+  {
+    "text": "today",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-25"
+    }
+  },
+  {
+    "text": "the day after tomorrow",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-27"
+    }
+  },
+  {
+    "text": "yesterday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-24"
+    },
+    "note": "Parsed, then refused by the validator. §4.3 'date in the past'."
+  },
+  {
+    "text": "the 28th",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "the twenty-eighth",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "the 4th",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-09-04"
+    },
+    "note": "Rolls into next month because the 4th has gone in August."
+  },
+  {
+    "text": "the first",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-09-01"
+    }
+  },
+  {
+    "text": "28th august",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "august 28",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "28/08/2026",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    },
+    "note": "Day-first: the restaurant leads with en-IN."
+  },
+  {
+    "text": "2026-08-28",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "friday the 28th",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    },
+    "note": "Both halves have to agree."
+  },
+  {
+    "text": "monday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-31"
+    },
+    "note": "Parses; the validator refuses it as a closed day."
+  },
+  {
+    "text": "next thursday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-09-03"
+    }
+  },
+  {
+    "text": "in three days",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    }
+  },
+  {
+    "text": "in a fortnight",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-09-08"
+    }
+  },
+  {
+    "text": "in two weeks",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-09-08"
+    }
+  },
+  {
+    "text": "20th october",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-10-20"
+    },
+    "note": "The configured Diwali closure. Parsed, refused later."
+  },
+  {
+    "text": "2027-01-15",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2027-01-15"
+    },
+    "note": "Beyond the 60-day horizon. Parsed, refused later."
+  },
+  {
+    "text": "thursday sorry friday",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-28"
+    },
+    "note": "A self-correction mid-utterance: the later date wins."
+  },
+  {
+    "text": "sunday lunch",
+    "slot": "date",
+    "expect": {
+      "kind": "ok",
+      "value": "2026-08-30"
+    },
+    "note": "'lunch' names a service, not a time, so only the date survives."
+  },
+  {
+    "text": "this weekend",
+    "slot": "date",
+    "expect": {
+      "kind": "ambiguous",
+      "candidates": [
+        "2026-08-29",
+        "2026-08-30"
+      ]
+    },
+    "note": "A weekend is two days; the parser asks rather than picks."
+  },
+  {
+    "text": "next weekend",
+    "slot": "date",
+    "expect": {
+      "kind": "ambiguous",
+      "candidates": [
+        "2026-09-05",
+        "2026-09-06"
+      ]
+    }
+  },
+  {
+    "text": "next week",
+    "slot": "date",
+    "expect": {
+      "kind": "ambiguous",
+      "candidates": [
+        "2026-08-31",
+        "2026-09-01",
+        "2026-09-02",
+        "2026-09-03",
+        "2026-09-04",
+        "2026-09-05",
+        "2026-09-06"
+      ]
+    }
+  },
+  {
+    "text": "31st february",
+    "slot": "date",
+    "expect": {
+      "kind": "none"
+    },
+    "note": "An impossible date is 'none', never a nearby date."
+  },
+  {
+    "text": "the 35th",
+    "slot": "date",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "christmas",
+    "slot": "date",
+    "expect": {
+      "kind": "none"
+    },
+    "note": "Holidays are not in the vocabulary; the agent asks for a day."
+  },
+  {
+    "text": "sometime soon",
+    "slot": "date",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "blorp",
+    "slot": "date",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "7pm",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:00"
+    }
+  },
+  {
+    "text": "seven pm",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:00"
+    }
+  },
+  {
+    "text": "half seven",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:30"
+    },
+    "note": "Colloquial British half-past."
+  },
+  {
+    "text": "half past eight",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:30"
+    }
+  },
+  {
+    "text": "quarter past eight",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:15"
+    }
+  },
+  {
+    "text": "quarter to nine",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:45"
+    }
+  },
+  {
+    "text": "around 8",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:00"
+    },
+    "note": "Hedged times still resolve; the read-back is where a misread is caught."
+  },
+  {
+    "text": "8ish",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:00"
+    }
+  },
+  {
+    "text": "seven",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:00"
+    },
+    "note": "A bare hour resolved against Tuesday's dinner-only window."
+  },
+  {
+    "text": "seven thirty",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:30"
+    }
+  },
+  {
+    "text": "eight o'clock",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:00"
+    }
+  },
+  {
+    "text": "ten past seven",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:10"
+    },
+    "note": "Not on a 15-minute boundary; the validator refuses it."
+  },
+  {
+    "text": "19:30",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:30"
+    }
+  },
+  {
+    "text": "7.15",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:15"
+    }
+  },
+  {
+    "text": "2230",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "22:30"
+    }
+  },
+  {
+    "text": "noon",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "12:00"
+    }
+  },
+  {
+    "text": "midnight",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "00:00"
+    },
+    "note": "Parsed faithfully so the validator can name the real hours."
+  },
+  {
+    "text": "3am",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "03:00"
+    },
+    "note": "§4.3 'time outside opening hours'."
+  },
+  {
+    "text": "11am",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "11:00"
+    }
+  },
+  {
+    "text": "half past two",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "14:30"
+    }
+  },
+  {
+    "text": "one",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "13:00"
+    },
+    "onDate": "2026-08-28",
+    "note": "On a Friday a bare 'one' lands in the lunch window."
+  },
+  {
+    "text": "two",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "14:00"
+    },
+    "onDate": "2026-08-28"
+  },
+  {
+    "text": "half twelve",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "12:30"
+    },
+    "onDate": "2026-08-28"
+  },
+  {
+    "text": "eight",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "20:00"
+    },
+    "onDate": "2026-08-28"
+  },
+  {
+    "text": "10pm",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "22:00"
+    },
+    "onDate": "2026-08-28",
+    "note": "Saturday and Friday close at 23:00; last seating is 22:00."
+  },
+  {
+    "text": "five thirty",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "17:30"
+    },
+    "onDate": "2026-08-28",
+    "note": "Before service. Parsed, then refused."
+  },
+  {
+    "text": "in the evening",
+    "slot": "time",
+    "expect": {
+      "kind": "none"
+    },
+    "note": "Names a service, not a time. Inventing 19:00 here is the failure this project exists to avoid."
+  },
+  {
+    "text": "for dinner",
+    "slot": "time",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "early",
+    "slot": "time",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "banana",
+    "slot": "time",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "nineteen thirty",
+    "slot": "time",
+    "expect": {
+      "kind": "ok",
+      "value": "19:30"
+    },
+    "note": "ask_time_again tells the visitor to say it like this, so the parser has to accept it."
+  },
+  {
+    "text": "four of us",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 4
+    }
+  },
+  {
+    "text": "just me",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 1
+    }
+  },
+  {
+    "text": "party of six",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 6
+    }
+  },
+  {
+    "text": "table for two",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 2
+    }
+  },
+  {
+    "text": "there'll be five of us",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 5
+    }
+  },
+  {
+    "text": "a couple",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 2
+    }
+  },
+  {
+    "text": "me and my wife",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 2
+    }
+  },
+  {
+    "text": "two adults and two kids",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 4
+    },
+    "note": "Two counts, summed."
+  },
+  {
+    "text": "half a dozen",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 6
+    }
+  },
+  {
+    "text": "a table for 8 people",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 8
+    }
+  },
+  {
+    "text": "seven of us",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 7
+    },
+    "note": "Seven parses; the largest table seats six, so the engine escalates."
+  },
+  {
+    "text": "twelve of us",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 12
+    },
+    "note": "§4.3 'party > 8'. Parsed, then escalated."
+  },
+  {
+    "text": "forty people",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 40
+    },
+    "note": "The prompt-injection size from §12.7. The parser is honest; the validator says no."
+  },
+  {
+    "text": "zero",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 0
+    },
+    "note": "§4.3 'party <= 0 or nonsense'."
+  },
+  {
+    "text": "minus two",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": -2
+    }
+  },
+  {
+    "text": "actually make it five",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 5
+    },
+    "note": "A correction: 'make it five' beats the bare number a time parser would see."
+  },
+  {
+    "text": "table for 1",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ok",
+      "value": 1
+    }
+  },
+  {
+    "text": "four or five",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ambiguous",
+      "candidates": [
+        4,
+        5
+      ]
+    },
+    "note": "R-03: the agent asks which, it never picks."
+  },
+  {
+    "text": "two of us maybe three",
+    "slot": "partySize",
+    "expect": {
+      "kind": "ambiguous",
+      "candidates": [
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "text": "loads of us",
+    "slot": "partySize",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "a lot",
+    "slot": "partySize",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "it's under Karani",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Karani"
+    }
+  },
+  {
+    "text": "Karani",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Karani"
+    }
+  },
+  {
+    "text": "the name is Mehta",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Mehta"
+    }
+  },
+  {
+    "text": "under the name Smith",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Smith"
+    }
+  },
+  {
+    "text": "put it under D'Souza",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "D'Souza"
+    }
+  },
+  {
+    "text": "K-A-R-A-N-I",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Karani"
+    },
+    "note": "A spell-out is one name, not six initials."
+  },
+  {
+    "text": "my name is Priya Karani",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Priya Karani"
+    }
+  },
+  {
+    "text": "Anne-Marie Fernandes",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Anne-Marie Fernandes"
+    }
+  },
+  {
+    "text": "booking for de la Cruz",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "De La Cruz"
+    }
+  },
+  {
+    "text": "O'Brien",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "O'Brien"
+    }
+  },
+  {
+    "text": "Ng",
+    "slot": "name",
+    "expect": {
+      "kind": "ok",
+      "value": "Ng"
+    },
+    "note": "Two letters is a real surname."
+  },
+  {
+    "text": "<script>alert(1)</script>",
+    "slot": "name",
+    "expect": {
+      "kind": "none"
+    },
+    "note": "Disallowed characters fail the whole candidate rather than being scrubbed."
+  },
+  {
+    "text": "123456",
+    "slot": "name",
+    "expect": {
+      "kind": "none"
+    }
+  },
+  {
+    "text": "xxxxx yyyyy zzzzz wwwww vvvvv uuuuu ttttt",
+    "slot": "name",
+    "expect": {
+      "kind": "none"
+    },
+    "note": "Past the word cap: the visitor answered a different question."
+  },
+  {
+    "text": "9820011447",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "9820011447"
+    }
+  },
+  {
+    "text": "nine eight two zero zero double one four four seven",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "9820011447"
+    },
+    "note": "Spoken, with 'double'."
+  },
+  {
+    "text": "98200 11447",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "9820011447"
+    }
+  },
+  {
+    "text": "my number is 9820011447",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "9820011447"
+    }
+  },
+  {
+    "text": "+91 98200 11447",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "919820011447"
+    },
+    "note": "The country code is kept as dictated; nothing is invented."
+  },
+  {
+    "text": "0 9 8 2 0 0 1 1 4 4 7",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "9820011447"
+    },
+    "note": "Leading trunk zero dropped, because what remains is still a number."
+  },
+  {
+    "text": "my mobile is 07700 900123",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "7700900123"
+    }
+  },
+  {
+    "text": "double one two three",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "1123"
+    },
+    "note": "Four digits. §4.3 'phone number wrong length' — refused one layer up."
+  },
+  {
+    "text": "98200114470000000000",
+    "slot": "phone",
+    "expect": {
+      "kind": "ok",
+      "value": "98200114470000000000"
+    },
+    "note": "Too long. Parsed faithfully, refused by the validator."
+  },
+  {
+    "text": "999",
+    "slot": "phone",
+    "expect": {
+      "kind": "none"
+    },
+    "note": "Below the minimum run length: three digits are not a phone number."
+  },
+  {
+    "text": "no idea",
+    "slot": "phone",
+    "expect": {
+      "kind": "none"
+    }
+  }
+]

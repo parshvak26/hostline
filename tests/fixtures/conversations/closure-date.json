@@ -1,0 +1,25 @@
+{
+  "name": "closure-date",
+  "description": "The configured Diwali closure is refused separately from the weekly closed day.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on the 20th of october",
+    "friday",
+    "half seven",
+    "under Sen",
+    "9820011245",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "rejectionReasons": [
+      "date_closure"
+    ],
+    "lineKeys": [
+      "reject_date_closure",
+      "booked"
+    ]
+  }
+}

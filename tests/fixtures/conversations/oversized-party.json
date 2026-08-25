@@ -1,0 +1,20 @@
+{
+  "name": "oversized-party",
+  "description": "§4.3: a party of twelve ends the conversation as an escalation rather than a booking.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table for twelve on friday"
+  ],
+  "expect": {
+    "outcome": "escalate",
+    "rejectionReasons": [
+      "party_too_large"
+    ],
+    "lineKeys": [
+      "escalate_large_party"
+    ],
+    "minAgentTurns": 1
+  }
+}

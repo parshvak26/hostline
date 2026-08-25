@@ -1,0 +1,28 @@
+{
+  "name": "last-seating",
+  "description": "Friday closes at 23:00 and the last seating is an hour before, so half ten is refused.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on friday",
+    "half ten",
+    "half nine",
+    "under Bose",
+    "9820011241",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "time": "21:30"
+    },
+    "rejectionReasons": [
+      "time_after_last_seating"
+    ],
+    "lineKeys": [
+      "reject_time_last_seating",
+      "booked"
+    ]
+  }
+}

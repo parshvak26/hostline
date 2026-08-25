@@ -1,0 +1,19 @@
+{
+  "name": "party-above-largest-table",
+  "description": "Seven is inside maxPartySize but above the largest table, and combineTables is false — so it still escalates.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table for seven on friday"
+  ],
+  "expect": {
+    "outcome": "escalate",
+    "rejectionReasons": [
+      "party_too_large"
+    ],
+    "lineKeys": [
+      "escalate_large_party"
+    ]
+  }
+}

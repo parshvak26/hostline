@@ -1,0 +1,29 @@
+{
+  "name": "large-group-alternatives",
+  "description": "A party of six on the seeded Friday: both six-tops are held at 19:00, so the alternatives come from real inventory.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": true,
+  "turns": [
+    "a table for six on friday",
+    "seven pm",
+    "half past eight",
+    "under Iyer",
+    "9820011262",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "partySize": 6,
+      "time": "20:30"
+    },
+    "rejectionReasons": [
+      "no_availability"
+    ],
+    "lineKeys": [
+      "no_availability_with_alternatives",
+      "booked"
+    ]
+  }
+}

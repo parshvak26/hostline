@@ -1,0 +1,23 @@
+{
+  "name": "spelled-name",
+  "description": "A spelled-out surname is one name, and three slots arrive in the opening sentence.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on friday at half seven",
+    "K-A-R-A-N-I",
+    "9820011448",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "name": "Karani"
+    },
+    "lineKeys": [
+      "booked"
+    ],
+    "minAgentTurns": 3
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ember-and-oak",
+  "name": "Ember & Oak",
+  "established": 2019,
+  "neighbourhood": "Bandra",
+  "timezone": "Asia/Kolkata",
+  "locales": ["en-IN", "en-US"],
+
+  "service": {
+    "slotMinutes": 15,
+    "leadTimeMinutes": 30,
+    "horizonDays": 60,
+    "maxPartySize": 8,
+    "minPartySize": 1
+  },
+
+  "hours": [
+    { "day": "mon", "closed": true },
+    { "day": "tue", "windows": [["18:30", "22:30"]] },
+    { "day": "wed", "windows": [["18:30", "22:30"]] },
+    { "day": "thu", "windows": [["18:30", "22:30"]] },
+    { "day": "fri", "windows": [["12:30", "15:00"], ["18:30", "23:00"]] },
+    { "day": "sat", "windows": [["12:30", "15:00"], ["18:30", "23:00"]] },
+    { "day": "sun", "windows": [["12:30", "16:00"]] }
+  ],
+
+  "closures": [{ "date": "2026-10-20", "reason": "Diwali" }],
+
+  "tables": [
+    { "id": "T2", "seats": 2, "count": 6 },
+    { "id": "T4", "seats": 4, "count": 5 },
+    { "id": "T6", "seats": 6, "count": 2 }
+  ],
+
+  "turnTimeMinutes": {
+    "1": 75,
+    "2": 90,
+    "3": 105,
+    "4": 105,
+    "5": 120,
+    "6": 120,
+    "7": 135,
+    "8": 135
+  },
+
+  "policy": {
+    "combineTables": false,
+    "lastSeatingBeforeCloseMinutes": 60
+  }
+}

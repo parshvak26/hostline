@@ -1,0 +1,83 @@
+/*
+ * Design tokens — plan §5.2.
+ *
+ * This is the ONLY file in the project permitted to contain a raw hex colour.
+ * `scripts/check-design-rules.mjs` fails the build if a hex appears anywhere
+ * else. One palette, defined once, is what keeps a hand-written stylesheet
+ * from drifting into the look it was written to avoid.
+ *
+ * Dark mode is deliberately out of scope for MVP (ADR-0003). One committed
+ * warm palette beats two mediocre ones.
+ */
+
+:root {
+  /* ---- Colour ---------------------------------------------------------- */
+  --paper: #faf7f0;
+  --paper-deep: #f2ede3;
+  --ink: #1c1917;
+  --ink-soft: #57534e;
+  --rule: #ddd6c9;
+  --accent: #8c3a2b;
+  --accent-soft: #f0e2dd;
+  --ok: #3f6a4e;
+
+  /* Derived, still defined here so nothing downstream needs a literal. */
+  --paper-translucent: rgb(250 247 240 / 92%);
+  --ink-faint: rgb(28 25 23 / 8%);
+  --focus-ring: var(--accent);
+
+  /* ---- Type ------------------------------------------------------------ */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, "Times New Roman", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  /* 1.25 modular scale, 16px base. */
+  --size-xs: 0.8rem;      /* 12.8px */
+  --size-sm: 0.9rem;      /* 14.4px */
+  --size-base: 1rem;      /* 16px   */
+  --size-md: 1.25rem;     /* 20px   */
+  --size-lg: 1.5625rem;   /* 25px   */
+  --size-xl: 1.9531rem;   /* 31.25px */
+  --size-2xl: 2.4414rem;  /* 39px   */
+  --size-3xl: 3.0518rem;  /* 48.8px */
+  --leading-display: 1.15;
+  --leading-body: 1.6;
+  --tracking-display: -0.015em;
+  --tracking-caps: 0.14em;
+
+  /* ---- Spacing — an 8px scale ------------------------------------------ */
+  --space-1: 0.5rem;   /* 8   */
+  --space-2: 1rem;     /* 16  */
+  --space-3: 1.5rem;   /* 24  */
+  --space-4: 2rem;     /* 32  */
+  --space-5: 3rem;     /* 48  */
+  --space-6: 4rem;     /* 64  */
+  --space-7: 6rem;     /* 96  */
+  --space-8: 8rem;     /* 128 */
+
+  /* ---- Structure ------------------------------------------------------- */
+  --measure: 62ch;             /* never wider than ~68 characters (§5.2) */
+  --page-max: 68rem;
+  --hairline: 1px;
+  --radius: 2px;               /* radii above 4px are grep-forbidden */
+  --radius-button: 3px;
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --ease: cubic-bezier(0.2, 0, 0.15, 1);
+  --dur-slot: 180ms;
+  --dur-quick: 120ms;
+  --dur-calm: 320ms;
+}
+
+/* Motion is a preference, not a default. Honoured everywhere, including the
+   listening indicator (plan §14). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-slot: 0ms;
+    --dur-quick: 0ms;
+    --dur-calm: 0ms;
+  }
+}

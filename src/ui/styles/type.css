@@ -1,0 +1,100 @@
+/* Typography. Display serif for the restaurant's voice, system sans for the
+   interface. The pairing is the whole visual idea; everything else is spacing. */
+
+@font-face {
+  font-family: Fraunces;
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/fraunces-subset.woff2") format("woff2");
+
+  /* Optical size follows the rendered size; that is the point of this face. */
+  font-variation-settings: "SOFT" 0, "WONK" 0;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.restaurant-name {
+  font-family: var(--font-display);
+  font-size: clamp(var(--size-2xl), 8vw, var(--size-3xl));
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.restaurant-meta {
+  font-family: var(--font-display);
+  font-size: var(--size-base);
+  font-style: italic;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-size: clamp(var(--size-xl), 5vw, var(--size-2xl));
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--size-lg);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+.prose {
+  max-inline-size: var(--measure);
+  font-size: var(--size-base);
+  line-height: var(--leading-body);
+}
+
+.prose + .prose {
+  margin-block-start: var(--space-2);
+}
+
+.lede {
+  max-inline-size: var(--measure);
+  font-size: var(--size-md);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.small {
+  font-size: var(--size-sm);
+  color: var(--ink-soft);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--rule);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}

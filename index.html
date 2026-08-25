@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!--
+      Content-Security-Policy.
+
+      `connect-src` is assembled at build time from the gateway URL, so the page
+      can talk to its own worker and to nothing else. If a dependency ever tried
+      to phone home, this is what would stop it — and since the app has zero
+      runtime dependencies, nothing legitimate is inconvenienced.
+      See the `csp` plugin in vite.config.ts.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="%CSP%" />
+
+    <title>Ember &amp; Oak — Reservations, answered</title>
+    <meta
+      name="description"
+      content="Press one button and talk. Book a table at Ember &amp; Oak by having a conversation — no app, no signup, no typing unless you want to."
+    />
+    <meta name="theme-color" content="#faf7f0" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="icon" href="data:," />
+    <!--
+      The display face is self-hosted and preloaded: it is above the fold, and a
+      swap after first paint is the most visible kind of layout jank. Everything
+      else on the page uses the system sans stack and downloads nothing.
+    -->
+    <link rel="preload" href="./fonts/fraunces-subset.woff2" as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:title" content="Ember &amp; Oak — Reservations, answered" />
+    <meta
+      property="og:description"
+      content="Talk to an AI restaurant receptionist and book a table — in your browser, in one click."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#talk">Skip to the booking</a>
+
+    <div id="app" class="page">
+      <!--
+        The hero is server-rendered into the HTML rather than built by script.
+
+        Two reasons. It is the whole first impression, so it must be on screen
+        at first contentful paint rather than one JavaScript round trip later.
+        And it means a visitor whose script fails entirely still sees a real
+        restaurant page with a link to the source, instead of a blank rectangle
+        (plan §7.5 F12).
+      -->
+      <header class="hero" id="hero">
+        <p class="restaurant-name">Ember &amp; Oak</p>
+        <p class="restaurant-meta">est. 2019 · Bandra</p>
+
+        <h1 class="headline">Reservations, answered.</h1>
+        <p class="lede">
+          Press the button and just talk. Our AI host will ask when you would like to come, how many of you there
+          are, and your name — then check whether a table is really free.
+        </p>
+
+        <div class="hero__action">
+          <button type="button" id="talk" class="talk-button" data-state="idle">
+            <span class="talk-button__label">Talk to us</span>
+          </button>
+          <p class="talk-button__hint">Interrupt it. Change your mind. It keeps up.</p>
+
+          <p class="hero__links">
+            <button type="button" class="linkish" id="type-instead">Rather type?</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" class="linkish" id="privacy-toggle" aria-expanded="false" aria-controls="privacy">
+              What happens to my voice?
+            </button>
+          </p>
+
+          <div class="privacy-note" id="privacy" hidden>
+            <p class="prose small">
+              Your booking, the transcript, and every decision about tables stay in this browser. Nothing is uploaded
+              and there is no database.
+            </p>
+            <p class="prose small">
+              When the AI host is switched on, what you say is sent as text to an AI provider, and the reply is sent
+              to a voice provider to be spoken. In Chrome, speech recognition is done by the browser itself, which
+              sends audio to Google — that is a property of the browser, not of this page.
+            </p>
+            <p class="prose small">
+              In simple mode nothing leaves your device at all. No accounts, no cookies, no tracking.
+              <a href="https://github.com/parshvak26/hostline#privacy">Read more</a>.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Revealed on the first press, not before (plan §5.1). -->
+      <main id="conversation" class="conversation" hidden></main>
+
+      <section id="diary" class="diary" hidden></section>
+
+      <section id="how-it-works" class="how-it-works"></section>
+    </div>
+
+    <footer class="footer">
+      <p class="small">
+        A portfolio project by
+        <a href="https://github.com/parshvak26">parshvak26</a> ·
+        <a href="https://github.com/parshvak26/hostline">source on GitHub</a> · MIT
+      </p>
+      <p class="small">Ember &amp; Oak is a fictional restaurant. Every booking in the diary is made up.</p>
+    </footer>
+
+    <!--
+      The floor beneath every other failure state (plan §7.5 F12). Populated and
+      revealed by `window.onerror`; if the script never runs at all, the hero
+      above is still a complete, honest page.
+    -->
+    <div id="fallback" class="fallback-panel" hidden></div>
+
+    <script type="module" src="/src/main.ts"></script>
+    <noscript>
+      <p class="prose">
+        This demo needs JavaScript to talk to you. The
+        <a href="https://github.com/parshvak26/hostline">source and a recording</a> explain what it does.
+      </p>
+    </noscript>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "beyond-horizon",
+  "description": "A date past the 60-day horizon is refused with a reason rather than silently accepted.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on 15 january 2027",
+    "friday",
+    "half seven",
+    "under Basu",
+    "9820011246",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28"
+    },
+    "rejectionReasons": [
+      "date_beyond_horizon"
+    ],
+    "lineKeys": [
+      "reject_date_horizon",
+      "booked"
+    ]
+  }
+}

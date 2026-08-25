@@ -1,0 +1,377 @@
+/*
+ * Diary and transcript viewer — T-104, T-105.
+ *
+ * Two decisions are worth the words:
+ *
+ * 1. The "new" row is drawn with weight, not hue. A heavier rule above and
+ *    below it, and the word "new" in its last cell (plan §5.3, §14). Nothing
+ *    here paints a background behind a row, so the mark survives greyscale,
+ *    forced-colours mode, and a screenshot in a README.
+ *
+ * 2. **At 375px the table scrolls inside its own container, it does not
+ *    restack.** The alternative — collapsing each row into a labelled block —
+ *    means duplicating the column headings into `::before` content, which
+ *    stops being a table for anyone reading it cell by cell and hard-codes
+ *    English strings into a stylesheet. Four short columns rarely overflow a
+ *    375px screen anyway; when a long name makes them, the overflow is confined
+ *    to `.diary-table__scroll` and the page body never moves sideways.
+ */
+
+.diary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-inline-size: var(--page-max);
+}
+
+.diary__header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.diary__title {
+  margin-block-start: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--size-xl);
+  font-weight: 600;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.diary__lede,
+.diary__subtitle {
+  max-inline-size: var(--measure);
+  color: var(--ink-soft);
+}
+
+.diary__subtitle {
+  font-family: var(--font-display);
+  font-size: var(--size-md);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---- buttons ------------------------------------------------------------ */
+
+.diary__back,
+.diary__read,
+.diary__clear,
+.diary__confirm-yes,
+.diary__confirm-no {
+  padding: var(--space-1) var(--space-2);
+  background-color: transparent;
+  color: var(--ink);
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--radius-button);
+  font-size: var(--size-sm);
+  text-align: start;
+  cursor: pointer;
+  transition: border-color var(--dur-quick) var(--ease);
+}
+
+.diary__back:hover,
+.diary__read:hover,
+.diary__clear:hover,
+.diary__confirm-yes:hover,
+.diary__confirm-no:hover {
+  border-color: var(--ink-soft);
+}
+
+.diary__clear[disabled] {
+  color: var(--ink-soft);
+  cursor: default;
+}
+
+.diary__confirm-yes {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---- the table ---------------------------------------------------------- */
+
+.diary-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* The one place sideways movement is allowed, and it stops here. */
+.diary-table__scroll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.diary-table__day {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.diary-table__caption {
+  padding-block-end: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--size-md);
+  font-weight: 600;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.diary-table__head {
+  padding: var(--space-1) var(--space-2) var(--space-1) 0;
+  border-block-end: var(--hairline) solid var(--rule);
+  color: var(--ink-soft);
+  font-size: var(--size-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-align: start;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.diary-table__row > * {
+  padding: var(--space-1) var(--space-2) var(--space-1) 0;
+  border-block-end: var(--hairline) solid var(--rule);
+  font-weight: 400;
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.diary-table__time {
+  font-family: var(--font-mono);
+  font-size: var(--size-sm);
+  white-space: nowrap;
+}
+
+.diary-table__name {
+  /* A long name wraps rather than widening the table past the viewport. */
+  min-inline-size: 8ch;
+  overflow-wrap: anywhere;
+}
+
+.diary-table__guests,
+.diary-table__party {
+  white-space: nowrap;
+}
+
+/*
+ * The new booking: a rule above and below, and a word in the last cell.
+ * No fill, no tint, nothing that disappears in greyscale.
+ */
+.diary-table__row[data-new="true"] > * {
+  border-block-end: 2px solid var(--ink);
+  border-block-start: 2px solid var(--ink);
+  font-weight: 600;
+}
+
+.diary-table__marker {
+  font-size: var(--size-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.diary-table__marker--new {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Seeded rows are the demo's furniture; they recede without hiding. */
+.diary-table__marker--demo {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.diary-table__marker--yours {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.diary-table__empty {
+  max-inline-size: var(--measure);
+  padding-block-start: var(--space-1);
+  color: var(--ink-soft);
+  font-size: var(--size-sm);
+}
+
+/* ---- conversations ------------------------------------------------------ */
+
+.diary__conversations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.diary__conversation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.diary__panel {
+  inline-size: 100%;
+  max-inline-size: var(--measure);
+  padding-inline-start: var(--space-2);
+  border-inline-start: var(--hairline) solid var(--rule);
+}
+
+.diary__summary {
+  padding-block-end: var(--space-2);
+  color: var(--ink-soft);
+  font-size: var(--size-sm);
+}
+
+.diary__turns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.diary__byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.diary__speaker {
+  color: var(--ink-soft);
+  font-size: var(--size-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.diary__brain {
+  padding: 0 var(--space-1);
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-size: var(--size-xs);
+}
+
+.diary__said {
+  max-inline-size: var(--measure);
+  overflow-wrap: anywhere;
+}
+
+/* Agent turns in the serif, visitor turns in the sans (plan §5.3). */
+.diary__turn[data-role="agent"] .diary__said {
+  font-family: var(--font-display);
+}
+
+/* ---- refused proposals — the point of the whole view -------------------- */
+
+/*
+ * Deliberately not styled as an error. No warning colour, no alert icon, no
+ * disclosure to open: a refusal is the engine doing its job, and it is laid out
+ * like a record rather than a complaint (plan §10.3).
+ */
+.diary__rejection {
+  max-inline-size: var(--measure);
+  padding: var(--space-1) var(--space-2);
+  margin-block-start: var(--space-1);
+  background-color: var(--paper-deep);
+  border-inline-start: 2px solid var(--ink-soft);
+  border-radius: var(--radius);
+}
+
+.diary__rejection-label {
+  color: var(--ink);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.diary__rejection-pairs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 var(--space-2);
+  margin-block-start: var(--space-1);
+  font-size: var(--size-sm);
+}
+
+.diary__rejection-pairs dt {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.diary__rejection-pairs dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.diary__rejection-reason {
+  font-family: var(--font-mono);
+  font-size: var(--size-xs);
+}
+
+/* ---- clearing ----------------------------------------------------------- */
+
+.diary__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-block-start: var(--hairline) solid var(--rule);
+}
+
+.diary__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-inline-size: var(--measure);
+  padding: var(--space-2);
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.diary__confirm-warning {
+  font-size: var(--size-sm);
+}
+
+.diary__confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.diary__status {
+  color: var(--ink-soft);
+  font-size: var(--size-sm);
+}
+
+.diary__status:empty {
+  display: none;
+}
+
+/* ---- 375px -------------------------------------------------------------- */
+
+@media (width <= 30rem) {
+  .diary {
+    gap: var(--space-3);
+  }
+
+  .diary-table__day {
+    font-size: var(--size-sm);
+  }
+
+  .diary-table__head,
+  .diary-table__row > * {
+    padding-inline-end: var(--space-1);
+  }
+
+  .diary__read,
+  .diary__back,
+  .diary__clear {
+    inline-size: 100%;
+  }
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How it works
+    url: https://github.com/parshvak26/hostline/blob/main/docs/architecture.md
+    about: The architecture, the trust boundaries, and one turn end to end.
+  - name: Running your own copy
+    url: https://github.com/parshvak26/hostline/blob/main/docs/self-hosting.md
+    about: Fork it, deploy your own gateway, use your own keys.

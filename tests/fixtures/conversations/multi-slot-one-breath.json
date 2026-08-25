@@ -1,0 +1,25 @@
+{
+  "name": "multi-slot-one-breath",
+  "description": "Four slots in a single sentence, with the phone number surviving next to a time and a party size.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "hi can I get a table for two this friday at half seven on 9820011234",
+    "under Mehta",
+    "yes please"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "19:30",
+      "partySize": 2,
+      "name": "Mehta",
+      "phone": "9820011234"
+    },
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

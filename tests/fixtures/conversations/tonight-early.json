@@ -1,0 +1,24 @@
+{
+  "name": "tonight-early",
+  "description": "'Tonight' names today however late it is; at 17:00 the evening is still bookable.",
+  "today": "2026-08-25",
+  "nowTime": "17:00",
+  "seeded": false,
+  "turns": [
+    "a table for two tonight",
+    "half seven",
+    "under Dutta",
+    "9820011250",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-25",
+      "time": "19:30"
+    },
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

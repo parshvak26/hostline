@@ -1,0 +1,25 @@
+{
+  "name": "solo-diner",
+  "description": "'Just me' is a party of one, and the read-back says 'one guest' rather than '1 guests'.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "just me",
+    "friday",
+    "half seven",
+    "under Rao",
+    "9820011235",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "partySize": 1
+    },
+    "lineKeys": [
+      "readback",
+      "booked"
+    ]
+  }
+}

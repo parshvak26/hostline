@@ -1,0 +1,28 @@
+{
+  "name": "correction-before-readback",
+  "description": "A party-size correction mid-collection is taken at face value and the larger table is allocated.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table for four on friday",
+    "half seven",
+    "sorry make it six",
+    "under Menon",
+    "9820011260",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "19:30",
+      "partySize": 6,
+      "name": "Menon",
+      "phone": "9820011260"
+    },
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

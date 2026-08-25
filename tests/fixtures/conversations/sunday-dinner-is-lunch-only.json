@@ -1,0 +1,29 @@
+{
+  "name": "sunday-dinner-is-lunch-only",
+  "description": "Sunday serves lunch only, so 8pm is outside hours even though it is a normal dinner time on other days.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on sunday",
+    "eight pm",
+    "two o'clock",
+    "under Dey",
+    "9820011247",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-30",
+      "time": "14:00"
+    },
+    "rejectionReasons": [
+      "time_outside_hours"
+    ],
+    "lineKeys": [
+      "reject_time_hours",
+      "booked"
+    ]
+  }
+}

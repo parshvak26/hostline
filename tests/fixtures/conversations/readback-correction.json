@@ -1,0 +1,31 @@
+{
+  "name": "readback-correction",
+  "description": "Saying no to the read-back does not book anything; the corrected time is read back again before it does.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on friday",
+    "half seven",
+    "under Bose",
+    "9820011241",
+    "no",
+    "half past eight",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "20:30",
+      "partySize": 2,
+      "name": "Bose",
+      "phone": "9820011241"
+    },
+    "lineKeys": [
+      "readback",
+      "changed_needs_reconfirm",
+      "booked"
+    ]
+  }
+}

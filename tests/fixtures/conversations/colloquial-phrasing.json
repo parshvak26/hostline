@@ -1,0 +1,27 @@
+{
+  "name": "colloquial-phrasing",
+  "description": "Nothing said the clean way: 'four of us', 'half seven', 'it's under', and a phone number spelled out with 'double'.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "four of us on friday",
+    "half seven",
+    "it's under Karani",
+    "nine eight two zero zero double one four four seven",
+    "yes please"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "19:30",
+      "partySize": 4,
+      "name": "Karani",
+      "phone": "9820011447"
+    },
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

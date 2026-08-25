@@ -1,0 +1,25 @@
+# Plan §13: pinned versions, plus automated updates so pinning does not quietly
+# become "stale". Weekly rather than daily — this project has ~15 dev
+# dependencies and zero runtime dependencies, so there is very little to update
+# and a daily cadence would only produce noise.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dev-dependencies:
+        dependency-type: development
+
+  - package-ecosystem: npm
+    directory: /worker
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

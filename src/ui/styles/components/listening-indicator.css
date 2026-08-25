@@ -1,0 +1,75 @@
+/*
+ * Listening indicator (T-101) — a ruled line with a pen on it.
+ *
+ * Everything that moves is set from JavaScript by attribute; this file owns
+ * only the ink. The 6:1 box matches the SVG viewBox exactly, so the drawing is
+ * never stretched and the nib stays round.
+ */
+
+.listening-indicator {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.listening-indicator__wave {
+  flex: 0 0 auto;
+  inline-size: 15rem;
+  block-size: 2.5rem;
+}
+
+.listening-indicator__rule {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The lifted pen. Shape, not colour, is what separates this from listening. */
+.listening-indicator[data-state="speaking"] .listening-indicator__rule {
+  stroke-dasharray: 3 6;
+}
+
+.listening-indicator__trace {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.listening-indicator__dot {
+  fill: var(--accent);
+}
+
+/* Off by default: the resting state is a bare rule, and every state that draws
+   more than that opts in. */
+.listening-indicator__trace,
+.listening-indicator__dot {
+  display: none;
+}
+
+.listening-indicator[data-active="true"][data-state="listening"] .listening-indicator__trace,
+.listening-indicator[data-active="true"][data-state="thinking"] .listening-indicator__trace,
+.listening-indicator[data-active="true"][data-state="listening"] .listening-indicator__dot,
+.listening-indicator[data-active="true"][data-state="thinking"] .listening-indicator__dot,
+.listening-indicator[data-active="true"][data-state="warming"] .listening-indicator__dot {
+  display: block;
+}
+
+.listening-indicator__status {
+  color: var(--ink-soft);
+  font-size: var(--size-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* The status word is the accessible one, so it is never the thing that goes
+   when space runs out — the drawing shrinks instead, keeping its ratio. */
+@media (width <= 30rem) {
+  .listening-indicator__wave {
+    inline-size: 11.25rem;
+    block-size: 1.875rem;
+  }
+}

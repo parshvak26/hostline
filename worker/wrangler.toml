@@ -1,0 +1,62 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "hostline-gateway"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Free plan. No paid features are used anywhere in this file, which is the
+# structural reason this project cannot generate a bill (plan §22).
+workers_dev = true
+
+[vars]
+# Public, non-secret configuration. Secrets are NEVER listed here — they are set
+# once with `wrangler secret put NAME`. See docs/self-hosting.md.
+#
+# The origin allowed to call this gateway. Change it if you fork.
+ALLOWED_ORIGIN = "https://parshvak26.github.io"
+# Conservative: roughly 60% of the provider's free daily allowance, because the
+# in-isolate counter behind it is approximate by design (plan §11).
+DAILY_TURN_CEILING = "600"
+# Flip to "on" to force every visitor into rule mode within 60 seconds (R-37).
+# This var is a fallback; the live switch is the KILL_SWITCH key in KV, which
+# does not require a redeploy.
+KILL_SWITCH = "off"
+MODEL_NAME = "llama-3.3-70b-versatile"
+TTS_MODEL = "playai-tts"
+TTS_VOICE = "Celeste-PlayAI"
+STT_MODEL = "whisper-large-v3-turbo"
+
+# Kill switch and the coalesced daily counter. Free tier: 100k reads/day,
+# ~1k writes/day — which is exactly why writes are coalesced (plan §11).
+[[kv_namespaces]]
+binding = "STATE"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+# Per-IP and per-session limits. Uses no KV writes at all, which is what makes
+# the write budget survivable.
+[[unsafe.bindings]]
+name = "SESSION_LIMITER"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 12, period = 60 }
+
+# Plan §11 asks for "5 sessions per IP per hour". The rate-limiting binding only
+# supports 10-second and 60-second windows, so an hourly figure is not
+# expressible here. Two per minute is the closest useful equivalent: it stops a
+# tight loop dead, and the controls that actually bound the day are Turnstile on
+# `/session` and the global daily ceiling. Stated rather than quietly rounded.
+[[unsafe.bindings]]
+name = "IP_LIMITER"
+type = "ratelimit"
+namespace_id = "1002"
+simple = { limit = 2, period = 60 }
+
+[observability]
+enabled = true
+
+# Secrets required at runtime, set with `wrangler secret put`:
+#   MODEL_API_KEY      the Groq key used by /chat
+#   TTS_API_KEY        usually the same Groq key
+#   STT_API_KEY        usually the same Groq key
+#   TURNSTILE_SECRET   from the Cloudflare Turnstile dashboard
+#   SESSION_SECRET     any long random string; signs the session tokens

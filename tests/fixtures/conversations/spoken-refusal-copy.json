@@ -1,0 +1,24 @@
+{
+  "name": "spoken-refusal-copy",
+  "description": "§4.3: a date in the past should be refused out loud (\"that's already gone by\"), not only in the transcript.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table for two yesterday",
+    "friday",
+    "half seven",
+    "under Rao",
+    "9820011235",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "rejectionReasons": [
+      "date_in_past"
+    ],
+    "lineKeys": [
+      "reject_date_past"
+    ]
+  }
+}

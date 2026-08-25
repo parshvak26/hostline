@@ -1,0 +1,171 @@
+/* The slot panel (T-102).
+ *
+ * Everything a state needs to be readable is here twice: once as colour and
+ * once as something that survives a greyscale screenshot — slope, weight, and
+ * a word. Colour is the reinforcement, never the message (plan §14).
+ *
+ * Transitions are 180ms via --dur-slot, which the token file already collapses
+ * to 0ms under prefers-reduced-motion, so nothing here needs a second query. */
+
+.slot-panel {
+  padding: var(--space-3);
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--radius);
+  background-color: var(--paper-deep);
+}
+
+.slot-panel__title {
+  font-family: var(--font-display);
+  font-size: var(--size-md);
+  font-weight: 500;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+/* The mobile summary row. Hidden — and therefore out of the accessibility
+   tree — at every width where the five rows are already on screen. */
+.slot-panel__toggle {
+  display: none;
+  align-items: baseline;
+  justify-content: space-between;
+  inline-size: 100%;
+  padding: var(--space-1) 0;
+  border: 0;
+  border-block-end: var(--hairline) solid var(--rule);
+  background: none;
+  gap: var(--space-1);
+  font-size: var(--size-sm);
+  text-align: start;
+  cursor: pointer;
+}
+
+.slot-panel__summary {
+  overflow: hidden;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.slot-panel__chevron {
+  flex: none;
+  color: var(--ink-soft);
+  transition: transform var(--dur-quick) var(--ease);
+}
+
+.slot-panel__toggle[aria-expanded="true"] .slot-panel__chevron {
+  transform: rotate(90deg);
+}
+
+.slot-panel__rows {
+  margin-block-start: var(--space-2);
+}
+
+/* Hairlines between rows, not around them: a five-line ruled list, not a table
+   of boxes. */
+.slot-panel__row {
+  display: grid;
+  align-items: baseline;
+  padding-block: var(--space-1);
+  border-block-start: var(--hairline) solid var(--rule);
+  gap: 0 var(--space-2);
+  grid-template-columns: 5.5rem 1fr;
+}
+
+.slot-panel__row:first-child {
+  border-block-start: 0;
+}
+
+.slot-panel__label {
+  color: var(--ink-soft);
+  font-size: var(--size-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.slot-panel__cell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 0;
+  gap: 0 var(--space-1);
+}
+
+.slot-panel__value {
+  transition:
+    color var(--dur-slot) var(--ease),
+    font-weight var(--dur-slot) var(--ease);
+}
+
+/* Four presentations, four silhouettes. Read this column top to bottom with the
+   colour removed and the order is still weakest to strongest. */
+.slot-panel__value--empty {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.slot-panel__value--proposed {
+  color: var(--ink-soft);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.slot-panel__value--validated {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.slot-panel__value--confirmed {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.slot-panel__marker {
+  font-size: var(--size-xs);
+  color: var(--ink-soft);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  transition:
+    opacity var(--dur-slot) var(--ease),
+    transform var(--dur-slot) var(--ease);
+}
+
+/* The empty marker has no text, so this only matters on the way out of it —
+   the first value to arrive rises into place instead of appearing. */
+.slot-panel__row[data-state="empty"] .slot-panel__marker {
+  opacity: 0;
+  transform: translateY(0.2em);
+}
+
+.slot-panel__row[data-state="confirmed"] .slot-panel__marker {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.slot-panel__note {
+  color: var(--ink-soft);
+  font-size: var(--size-xs);
+  font-style: italic;
+}
+
+/* Plan §5.5: below 768px the panel is one summary line until it is asked to
+   open. `aria-expanded` is the state; this query is the only place it means
+   anything. */
+@media (width < 768px) {
+  .slot-panel {
+    padding: var(--space-2);
+  }
+
+  .slot-panel__toggle {
+    display: flex;
+  }
+
+  .slot-panel__toggle[aria-expanded="false"] + .slot-panel__rows {
+    display: none;
+  }
+
+  .slot-panel__row {
+    grid-template-columns: 4.5rem 1fr;
+  }
+}

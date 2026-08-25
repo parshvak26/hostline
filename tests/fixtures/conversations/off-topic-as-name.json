@@ -1,0 +1,25 @@
+{
+  "name": "off-topic-as-name",
+  "description": "§4.3: an off-topic question asked before the name is known should still be deflected, not stored as the booking name.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "do you have parking",
+    "friday",
+    "half seven",
+    "two of us",
+    "under Shah",
+    "9820011236",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "name": "Shah"
+    },
+    "lineKeys": [
+      "deflect"
+    ]
+  }
+}

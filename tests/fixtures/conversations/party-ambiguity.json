@@ -1,0 +1,26 @@
+{
+  "name": "party-ambiguity",
+  "description": "R-03: 'four or five' is a question, not a value. Nothing enters the slot until the visitor narrows it.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table on friday",
+    "four or five",
+    "four",
+    "half seven",
+    "under Ghosh",
+    "9820011243",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "partySize": 4
+    },
+    "lineKeys": [
+      "ask_disambiguate",
+      "booked"
+    ]
+  }
+}

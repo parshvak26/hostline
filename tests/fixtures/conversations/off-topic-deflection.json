@@ -1,0 +1,25 @@
+{
+  "name": "off-topic-deflection",
+  "description": "§4.3: one short deflection, then straight back to the pending question.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "friday at half seven for two",
+    "under Shah",
+    "do you have parking",
+    "9820011236",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "name": "Shah"
+    },
+    "lineKeys": [
+      "deflect",
+      "ask_phone",
+      "booked"
+    ]
+  }
+}

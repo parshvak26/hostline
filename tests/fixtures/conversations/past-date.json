@@ -1,0 +1,29 @@
+{
+  "name": "past-date",
+  "description": "§4.3: yesterday has gone by. Parsed faithfully so the engine can say why.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table yesterday",
+    "friday",
+    "half seven",
+    "two of us",
+    "under Rao",
+    "9820011235",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28"
+    },
+    "rejectionReasons": [
+      "date_in_past"
+    ],
+    "lineKeys": [
+      "reject_date_past",
+      "booked"
+    ]
+  }
+}

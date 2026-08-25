@@ -1,0 +1,5 @@
+// Deliberate violation of the project-wide innerHTML ban.
+export function render(node: HTMLElement, value: string) {
+  node.innerHTML = value;
+  node.insertAdjacentHTML('beforeend', value);
+}

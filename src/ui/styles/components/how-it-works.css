@@ -1,0 +1,155 @@
+/*
+ * "How this works" — plan §5.2, §6, §25.
+ *
+ * Two constraints shape everything below. Nothing carries a colour that is not
+ * a token, so the diagram and the prose stay in one palette; and nothing here
+ * sets spacing on the block itself, because `index.html` already wraps this
+ * component in a `.how-it-works` section — a rule on the block would apply
+ * twice. Spacing therefore lives on the children, which nest harmlessly.
+ */
+
+.how-it-works {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.how-it-works__problem {
+  padding-block-start: var(--space-6);
+  border-block-start: var(--hairline) solid var(--rule);
+}
+
+.how-it-works__problem .section-title,
+.how-it-works__how .section-title,
+.how-it-works__decisions .section-title {
+  margin-block-end: var(--space-2);
+}
+
+/* Body text is never centred and never wider than the measure (plan §5.2). */
+.how-it-works p,
+.how-it-works li {
+  max-inline-size: var(--measure);
+  text-align: start;
+}
+
+/* ---- The diagram ------------------------------------------------------- */
+
+.how-it-works__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  margin: 0 0 var(--space-4);
+}
+
+.how-it-works__diagram-holder {
+  inline-size: 100%;
+}
+
+/*
+ * Scales with the container rather than sitting at a fixed width: at 375px it
+ * renders at roughly 1:1 with its own coordinate system, which is what keeps
+ * the labels legible on a phone. The cap stops it dominating on a desktop.
+ */
+.how-it-works__diagram {
+  inline-size: 100%;
+  max-inline-size: 26rem;
+  block-size: auto;
+  color: var(--ink-soft);
+}
+
+.how-it-works__caption {
+  max-inline-size: var(--measure);
+  color: var(--ink-soft);
+}
+
+.how-it-works__source {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.how-it-works__explanation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---- Key engineering decisions ----------------------------------------- */
+
+.how-it-works__cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+@media (width >= 48rem) {
+  .how-it-works__cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.how-it-works__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block-start: var(--space-2);
+  border-block-start: 2px solid var(--accent);
+}
+
+.how-it-works__card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--size-md);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.how-it-works__card-body {
+  font-size: var(--size-sm);
+  line-height: var(--leading-body);
+}
+
+.how-it-works__card-link {
+  margin-block-start: auto;
+  font-size: var(--size-sm);
+  color: var(--ink-soft);
+}
+
+.how-it-works__card-link:hover {
+  color: var(--ink);
+}
+
+/* ---- Limitations, on the page and bordered (plan §25 item 9) ------------ */
+
+.how-it-works__limits {
+  padding: var(--space-3);
+  border: var(--hairline) solid var(--rule);
+  border-inline-start: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background-color: var(--paper-deep);
+}
+
+.how-it-works__limits-title {
+  margin-block-end: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--size-xs);
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+.how-it-works__limits-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.how-it-works__limit {
+  padding-inline-start: var(--space-2);
+  border-inline-start: var(--hairline) solid var(--rule);
+  font-size: var(--size-sm);
+  line-height: var(--leading-body);
+}

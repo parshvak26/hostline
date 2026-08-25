@@ -1,0 +1,33 @@
+{
+  "name": "alternatives",
+  "description": "The designed demo moment: 19:00 on the seeded Friday is full for four, and the engine offers three real times.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": true,
+  "turns": [
+    "a table for four on friday",
+    "seven o'clock",
+    "quarter past eight",
+    "under Karani",
+    "9820011447",
+    "yes please"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-28",
+      "time": "20:15",
+      "partySize": 4,
+      "name": "Karani",
+      "phone": "9820011447"
+    },
+    "rejectionReasons": [
+      "no_availability"
+    ],
+    "lineKeys": [
+      "no_availability_with_alternatives",
+      "booked"
+    ],
+    "minAgentTurns": 5
+  }
+}

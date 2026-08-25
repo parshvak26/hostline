@@ -1,0 +1,29 @@
+{
+  "name": "out-of-hours",
+  "description": "§4.3: 11am on a Wednesday. The refusal states the actual hours and the re-prompt is narrower.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two tomorrow",
+    "11am",
+    "half seven",
+    "under Nair",
+    "9820011240",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "date": "2026-08-26",
+      "time": "19:30"
+    },
+    "rejectionReasons": [
+      "time_outside_hours"
+    ],
+    "lineKeys": [
+      "reject_time_hours",
+      "booked"
+    ]
+  }
+}

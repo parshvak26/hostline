@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.local
+*.local
+.DS_Store
+playwright-report/
+test-results/
+.wrangler/
+worker/node_modules/
+worker/dist/
+.vite/
+lighthouse-report/

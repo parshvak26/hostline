@@ -1,0 +1,37 @@
+name: Evaluation and latency
+
+# Manual only. It needs a provider key, it spends free-tier allowance, and
+# publishing a measured number should be a deliberate act rather than a side
+# effect of a merge (plan §17).
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Write the results into docs/latency.md and the README'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Replay the fixture corpus and measure
+        run: npm run measure-latency -- --json > latency.json
+        env:
+          HOSTLINE_GATEWAY_URL: ${{ vars.VITE_GATEWAY_URL }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: latency
+          path: latency.json
+      - name: Record the run this came from
+        run: |
+          echo "Measured by workflow run ${{ github.run_id }} on ${{ runner.os }} (GitHub-hosted runner)." >> latency.json

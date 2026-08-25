@@ -1,0 +1,134 @@
+/* Reset and page-level foundations. Deliberately short — a long reset is a
+   framework by another name. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+
+ul[class],
+ol[class] {
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * `hidden` must actually hide.
+ *
+ * The attribute's default is only `display: none` from the UA stylesheet, so
+ * any component rule that sets `display` on the same element silently wins —
+ * which is how the diary ended up visible on first load despite being marked
+ * hidden in the HTML. This is the one place `!important` earns its keep: the
+ * attribute is a statement about whether the element exists for the visitor,
+ * and no layout rule should be able to argue with it.
+ */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--size-base);
+  line-height: var(--leading-body);
+  text-rendering: optimizeSpeed;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* A single, visible, never-removed focus ring (plan §14). */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Available to screen readers, invisible to everyone else. */
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  block-size: 1px;
+  inline-size: 1px;
+  margin: -1px;
+  padding: 0;
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 100;
+  inset-block-start: var(--space-1);
+  inset-inline-start: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  transform: translateY(-200%);
+  background-color: var(--paper);
+  color: var(--ink);
+  border: var(--hairline) solid var(--ink);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.page {
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+@media (width >= 48rem) {
+  .page {
+    padding-inline: var(--space-5);
+  }
+}
+
+hr,
+.rule {
+  block-size: 0;
+  margin: 0;
+  border: 0;
+  border-block-start: var(--hairline) solid var(--rule);
+}

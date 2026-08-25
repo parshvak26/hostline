@@ -1,0 +1,74 @@
+/* The catastrophic fallback panel (T-110, plan §7.5 F12).
+
+   An apology, not an alarm. No accent, no red, no icon — the panel is already
+   the loudest thing on the page by virtue of being the only thing on it, and
+   dressing it up would add fright to a page whose job is to be calm.
+
+   Kept to properties that cannot fail to apply: no grid, no custom layout the
+   stylesheet has to be fully parsed to make sense of. If half this file is
+   dropped the panel is still a readable column of text. */
+
+.fallback-panel {
+  max-inline-size: var(--measure);
+  margin-inline: auto;
+  padding: var(--space-5) var(--space-3);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: var(--leading-body);
+}
+
+.fallback-panel[hidden] {
+  display: none;
+}
+
+/* The host element in `index.html` already carries this class — it has to, so
+   that a panel which never gets populated is still shaped like one. The
+   component then nests inside it, so the inner box gives up its own gutter
+   rather than doubling the outer one. */
+.fallback-panel .fallback-panel {
+  max-inline-size: none;
+  margin-inline: 0;
+  padding: 0;
+}
+
+.fallback-panel__title {
+  font-family: var(--font-display);
+  font-size: var(--size-lg);
+  font-weight: 400;
+  line-height: var(--leading-display);
+}
+
+.fallback-panel__message {
+  margin-block-start: var(--space-2);
+  color: var(--ink-soft);
+}
+
+.fallback-panel__figure {
+  margin-block-start: var(--space-4);
+  margin-inline: 0;
+  padding-block-start: var(--space-3);
+  border-block-start: var(--hairline) solid var(--rule);
+}
+
+.fallback-panel__player {
+  inline-size: 100%;
+  block-size: auto;
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--radius);
+  background-color: var(--paper-deep);
+}
+
+.fallback-panel__caption {
+  margin-block-start: var(--space-1);
+  font-size: var(--size-sm);
+  color: var(--ink-soft);
+}
+
+.fallback-panel__links {
+  margin-block-start: var(--space-4);
+}
+
+.fallback-panel__link {
+  color: var(--ink);
+  text-underline-offset: 0.2em;
+}

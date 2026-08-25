@@ -1,0 +1,27 @@
+{
+  "name": "party-nonsense",
+  "description": "§4.3: a party of zero is refused as too small, and the agent carries on collecting.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "a table for zero on friday",
+    "two of us",
+    "half seven",
+    "under Roy",
+    "9820011244",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "partySize": 2
+    },
+    "rejectionReasons": [
+      "party_too_small"
+    ],
+    "lineKeys": [
+      "booked"
+    ]
+  }
+}

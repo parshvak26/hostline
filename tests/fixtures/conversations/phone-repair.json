@@ -1,0 +1,28 @@
+{
+  "name": "phone-repair",
+  "description": "§4.3: four digits is not a phone number. The refusal says how many were heard and the re-prompt is narrower.",
+  "today": "2026-08-25",
+  "nowTime": "18:00",
+  "seeded": false,
+  "turns": [
+    "table for two on friday",
+    "half seven",
+    "under Iyer",
+    "double one two three",
+    "9820011239",
+    "yes"
+  ],
+  "expect": {
+    "outcome": "booked",
+    "slots": {
+      "phone": "9820011239"
+    },
+    "rejectionReasons": [
+      "phone_too_short"
+    ],
+    "lineKeys": [
+      "ask_phone_again",
+      "booked"
+    ]
+  }
+}
