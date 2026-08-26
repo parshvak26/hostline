@@ -18,19 +18,32 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      # Built at the root base path, not `/hostline/`.
+      # Built at the root base path, and with no gateway.
       #
-      # Lighthouse CI serves `dist/` from the root of a throwaway server, so the
-      # production build's absolute `/hostline/assets/...` URLs would every one
-      # of them 404 — which shows up as a console-errors failure and a
-      # meaningless performance score. The real base path is covered where it
-      # matters, by the end-to-end suite, which runs against the production
-      # build at the production path.
+      # Lighthouse CI serves `dist/` from the root of a throwaway server on an
+      # ephemeral localhost port, so this build is deliberately not the
+      # production one:
+      #
+      #   * `VITE_BASE=/`, because the production build's absolute
+      #     `/hostline/assets/...` URLs would every one of them 404 against that
+      #     server — a console-errors failure and a meaningless score.
+      #
+      #   * no `VITE_GATEWAY_URL`, because the gateway's CORS allowlist is the
+      #     Pages origin and the three known dev ports. A throwaway port is
+      #     none of those, so the health probe on load is refused *correctly*
+      #     and the browser logs it — grading the page down for a security
+      #     control doing its job. Without a gateway the page runs its
+      #     no-gateway rung, which is a complete experience and still books a
+      #     table (`tests/e2e/no-gateway.spec.ts`).
+      #
+      #   * no `VITE_TURNSTILE_SITE_KEY`, which exists only to obtain a gateway
+      #     session and has nothing to ask for without one.
+      #
+      # The real base path and the real gateway are covered where it matters,
+      # by the end-to-end suite, which runs against the production build.
       - run: npm run build
         env:
           VITE_BASE: /
-          VITE_GATEWAY_URL: ${{ vars.VITE_GATEWAY_URL }}
-          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.14.x
