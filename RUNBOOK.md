@@ -251,17 +251,39 @@ gh workflow run deploy-pages.yml
 
 Wait two minutes and reload your page. The AI is now on.
 
-### Step 6 — Record the nice voice lines (one command)
+### Step 6 — Record the nice voice lines (optional)
 
-This makes the common replies instant instead of taking half a second.
+This makes the agent's common replies instant instead of taking about half a
+second. The site works fine without it.
+
+**First, a one-time click.** The voice model needs its terms accepted before it
+will answer anything. Open this in a browser, signed in to Groq:
+
+**https://console.groq.com/playground?model=canopylabs%2Forpheus-v1-english**
+
+Accept the terms. That's it — you never do this again.
+
+**Then, in Terminal:**
 
 ```bash
 cd /Users/mac/Desktop/Git/hostline
-export GROQ_API_KEY=gsk_your_key_here
+export GROQ_API_KEY=gsk_paste_your_key_here
 npm run bake-audio
 ```
 
-It will say `34 baked`. Then:
+`export` just means "remember this while this window is open". It is not saved
+to any file, and closing the Terminal forgets it.
+
+**It takes about four minutes.** That is not a bug — Groq's free tier allows ten
+requests a minute, so the script paces itself deliberately. You will see lines
+appear one every few seconds. It ends with `34/34 baked, 253.4 KB total`.
+
+If it stops partway, just run it again. Nothing already done is repeated.
+
+If it says the terms still need accepting, the click above did not take — try it
+again in the same browser you are signed into Groq with.
+
+**Then save the files:**
 
 ```bash
 git add public/audio
@@ -269,7 +291,8 @@ git commit -m "Add prebaked audio"
 git push
 ```
 
-That's it. You only ever do this again if you change the agent's wording.
+Wait two minutes and your live site uses them. You only ever repeat this if you
+change the agent's wording.
 
 ---
 

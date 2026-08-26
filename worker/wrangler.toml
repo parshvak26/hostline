@@ -21,16 +21,16 @@ DAILY_TURN_CEILING = "600"
 # This var is a fallback; the live switch is the KILL_SWITCH key in KV, which
 # does not require a redeploy.
 KILL_SWITCH = "off"
-MODEL_NAME = "llama-3.3-70b-versatile"
-TTS_MODEL = "playai-tts"
-TTS_VOICE = "Celeste-PlayAI"
+MODEL_NAME = "openai/gpt-oss-20b"
+TTS_MODEL = "canopylabs/orpheus-v1-english"
+TTS_VOICE = "troy"
 STT_MODEL = "whisper-large-v3-turbo"
 
 # Kill switch and the coalesced daily counter. Free tier: 100k reads/day,
 # ~1k writes/day — which is exactly why writes are coalesced (plan §11).
 [[kv_namespaces]]
 binding = "STATE"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "6ce5c85d66934f44b6a6fa0ae024ea54"
 
 # Per-IP and per-session limits. Uses no KV writes at all, which is what makes
 # the write budget survivable.

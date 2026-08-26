@@ -1,0 +1,212 @@
+{
+  "generatedAt": "2026-08-26T12:27:21.192Z",
+  "provider": "groq",
+  "model": "canopylabs/orpheus-v1-english",
+  "voice": "troy",
+  "clips": {
+    "greeting.0": {
+      "file": "greeting.0.opus",
+      "hash": "e13f870e72b6",
+      "bytes": 11551,
+      "text": "Ember and Oak. What can I put in the diary for you?"
+    },
+    "greeting_returning.0": {
+      "file": "greeting_returning.0.opus",
+      "hash": "43e0ecee5799",
+      "bytes": 8948,
+      "text": "Ember and Oak, welcome back. What are we booking?"
+    },
+    "ask_date.0": {
+      "file": "ask_date.0.opus",
+      "hash": "d31d0e718165",
+      "bytes": 5178,
+      "text": "Which day were you thinking?"
+    },
+    "ask_date.1": {
+      "file": "ask_date.1.opus",
+      "hash": "5e7b8ca173e5",
+      "bytes": 3614,
+      "text": "What day suits you?"
+    },
+    "ask_time.0": {
+      "file": "ask_time.0.opus",
+      "hash": "7c17c4d42c65",
+      "bytes": 9960,
+      "text": "And what time?"
+    },
+    "ask_time.1": {
+      "file": "ask_time.1.opus",
+      "hash": "874f74df70b4",
+      "bytes": 4893,
+      "text": "What time were you thinking?"
+    },
+    "ask_party.0": {
+      "file": "ask_party.0.opus",
+      "hash": "0be69071e5d7",
+      "bytes": 3975,
+      "text": "How many of you?"
+    },
+    "ask_party.1": {
+      "file": "ask_party.1.opus",
+      "hash": "ca0bf27ddd00",
+      "bytes": 7032,
+      "text": "And how many will there be?"
+    },
+    "ask_name.0": {
+      "file": "ask_name.0.opus",
+      "hash": "083a930d9be4",
+      "bytes": 6997,
+      "text": "What name should I put it under?"
+    },
+    "ask_name.1": {
+      "file": "ask_name.1.opus",
+      "hash": "65dfb94ac827",
+      "bytes": 8065,
+      "text": "And the name?"
+    },
+    "ask_phone.0": {
+      "file": "ask_phone.0.opus",
+      "hash": "b2aae08217d7",
+      "bytes": 6577,
+      "text": "Last thing, a phone number."
+    },
+    "ask_phone.1": {
+      "file": "ask_phone.1.opus",
+      "hash": "2fc15cffef50",
+      "bytes": 6469,
+      "text": "And a number to reach you on."
+    },
+    "ask_date_again.0": {
+      "file": "ask_date_again.0.opus",
+      "hash": "aa06377b66c2",
+      "bytes": 8004,
+      "text": "Which day — today, tomorrow, or a date?"
+    },
+    "ask_time_again.0": {
+      "file": "ask_time_again.0.opus",
+      "hash": "42453fdb4f9b",
+      "bytes": 11514,
+      "text": "What time — say it like half seven, or nineteen thirty."
+    },
+    "ask_party_again.0": {
+      "file": "ask_party_again.0.opus",
+      "hash": "effff9174786",
+      "bytes": 9198,
+      "text": "How many people, as a number between one and eight?"
+    },
+    "ask_name_again.0": {
+      "file": "ask_name_again.0.opus",
+      "hash": "af21420b8060",
+      "bytes": 6193,
+      "text": "Just the surname is fine."
+    },
+    "ask_phone_again.0": {
+      "file": "ask_phone_again.0.opus",
+      "hash": "a98c05438d51",
+      "bytes": 6302,
+      "text": "The digits on their own is fine."
+    },
+    "reject_date_closed.0": {
+      "file": "reject_date_closed.0.opus",
+      "hash": "79b062fc2ec2",
+      "bytes": 13934,
+      "text": "We are closed that day. Would another day work?"
+    },
+    "reject_date_closure.0": {
+      "file": "reject_date_closure.0.opus",
+      "hash": "cbfddb595495",
+      "bytes": 9734,
+      "text": "We are shut that day. Shall we find another?"
+    },
+    "reject_date_horizon.0": {
+      "file": "reject_date_horizon.0.opus",
+      "hash": "2842d7cdc159",
+      "bytes": 10484,
+      "text": "That is further ahead than we take bookings. Something sooner?"
+    },
+    "no_availability_none.0": {
+      "file": "no_availability_none.0.opus",
+      "hash": "d6437bf189eb",
+      "bytes": 12657,
+      "text": "We have nothing near that, I am afraid. Try us another week."
+    },
+    "escalate_large_party.0": {
+      "file": "escalate_large_party.0.opus",
+      "hash": "fdb7c13ed0a9",
+      "bytes": 10861,
+      "text": "For a group that size we would want to speak with you directly."
+    },
+    "escalate_general.0": {
+      "file": "escalate_general.0.opus",
+      "hash": "2eff7ff37625",
+      "bytes": 9575,
+      "text": "I will pass this to someone who can help properly."
+    },
+    "not_understood.0": {
+      "file": "not_understood.0.opus",
+      "hash": "43df06c93643",
+      "bytes": 6131,
+      "text": "Sorry, say that again?"
+    },
+    "not_understood.1": {
+      "file": "not_understood.1.opus",
+      "hash": "c1121ef7b84f",
+      "bytes": 5410,
+      "text": "I did not catch that."
+    },
+    "not_understood_offer_typing.0": {
+      "file": "not_understood_offer_typing.0.opus",
+      "hash": "ddeaff418c4a",
+      "bytes": 11142,
+      "text": "Still not catching it. You can type instead if that is easier."
+    },
+    "switching_to_typing.0": {
+      "file": "switching_to_typing.0.opus",
+      "hash": "ab07e7e5e956",
+      "bytes": 4841,
+      "text": "Let us switch to typing."
+    },
+    "still_there.0": {
+      "file": "still_there.0.opus",
+      "hash": "99deb8c91ee9",
+      "bytes": 3509,
+      "text": "Still there?"
+    },
+    "deflect.0": {
+      "file": "deflect.0.opus",
+      "hash": "5855fa12be76",
+      "bytes": 9038,
+      "text": "I only handle the bookings, I am afraid."
+    },
+    "abandoned.0": {
+      "file": "abandoned.0.opus",
+      "hash": "9585493f8682",
+      "bytes": 8981,
+      "text": "No problem. We are here when you need us."
+    },
+    "filler_checking.0": {
+      "file": "filler_checking.0.opus",
+      "hash": "155764a1465f",
+      "bytes": 4295,
+      "text": "Let me check."
+    },
+    "filler_checking.1": {
+      "file": "filler_checking.1.opus",
+      "hash": "116072712918",
+      "bytes": 3482,
+      "text": "One moment."
+    },
+    "filler_moment.0": {
+      "file": "filler_moment.0.opus",
+      "hash": "cff6489a58cf",
+      "bytes": 3259,
+      "text": "Bear with me."
+    },
+    "changed_needs_reconfirm.0": {
+      "file": "changed_needs_reconfirm.0.opus",
+      "hash": "53f26efa4066",
+      "bytes": 7650,
+      "text": "Right, let me read that back again."
+    }
+  }
+}
