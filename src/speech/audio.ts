@@ -90,6 +90,9 @@ export function createAudioQueue(context?: AudioContextLike): BrowserAudioQueue 
   const live = new Set<AudioSourceLike>();
   const listeners = new Set<() => void>();
 
+  /** How long to wait for the platform to resume audio before carrying on. */
+  const UNLOCK_TIMEOUT_MS = 2_000;
+
   /** Scheduling clock, in context time. */
   let cursor = 0;
   /** Chunks accepted but not yet scheduled. Part of "is the queue busy". */
@@ -160,7 +163,14 @@ export function createAudioQueue(context?: AudioContextLike): BrowserAudioQueue 
       if (active === null) return;
       if (active.state === 'running') return;
       try {
-        await active.resume();
+        // Bounded. On a machine with no audio device — a CI runner, a locked
+        // down VM — `resume()` returns a promise that never settles, and an
+        // unbounded await here stops the conversation from ever starting.
+        // Unlike a synchronous platform call, this one can be given a deadline.
+        await Promise.race([
+          active.resume(),
+          new Promise<void>((resolve) => setTimeout(resolve, UNLOCK_TIMEOUT_MS)),
+        ]);
       } catch {
         // Still suspended. The UI keeps the "tap to enable sound" affordance.
       }

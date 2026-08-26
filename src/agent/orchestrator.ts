@@ -213,7 +213,13 @@ export class Orchestrator {
   /** Begin a conversation. Must be called from a user gesture (audio unlock). */
   async begin(): Promise<void> {
     this.startedAt = this.options.deps.clock.now().iso;
-    await this.options.audio.unlock();
+
+    // Started inside the gesture — which is what browsers require — but
+    // deliberately **not awaited**. Whether the speaker works has no bearing on
+    // whether the conversation can begin, and on a machine with no audio device
+    // waiting for it means the greeting never appears and the button never
+    // leaves `idle`. Audio is a rung that is allowed to fail.
+    void this.options.audio.unlock();
 
     const opening = this.conversation.start();
     this.emit({ type: 'state', state: this.conversation.engineState });
