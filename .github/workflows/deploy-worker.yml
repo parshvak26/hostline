@@ -16,7 +16,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # The gateway is optional. A clone with no Cloudflare credentials — a fork,
       # or this repo before the owner has set them — should not get a red cross
@@ -33,7 +33,7 @@ jobs:
             echo "present=true" >> "$GITHUB_OUTPUT"
           fi
       - if: steps.credentials.outputs.present == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
