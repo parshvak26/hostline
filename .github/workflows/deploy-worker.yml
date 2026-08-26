@@ -17,15 +17,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      # The gateway is optional. A clone with no Cloudflare credentials — a fork,
+      # or this repo before the owner has set them — should not get a red cross
+      # for a component the site works fine without. Skip loudly instead.
+      - id: credentials
+        name: Check for Cloudflare credentials
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Gateway not deployed::CLOUDFLARE_API_TOKEN is not set, so the worker was not deployed. The site runs in simple mode, which is a complete experience. See docs/self-hosting.md to set it up."
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.credentials.outputs.present == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
-      - run: npm ci
-      - run: npm --prefix worker ci
-      - name: Worker tests must pass before anything ships
+      - if: steps.credentials.outputs.present == 'true'
+        run: npm ci
+      - if: steps.credentials.outputs.present == 'true'
+        run: npm --prefix worker ci
+      - if: steps.credentials.outputs.present == 'true'
+        name: Worker tests must pass before anything ships
         run: npm run test:worker
-      - name: Deploy
+      - if: steps.credentials.outputs.present == 'true'
+        name: Deploy
         # Secrets (MODEL_API_KEY and friends) are set once with
         # `wrangler secret put` and are not passed through this workflow.
         run: npx wrangler deploy --config worker/wrangler.toml

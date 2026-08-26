@@ -382,6 +382,34 @@ everything works again. Rebooting does the same thing. You can confirm this is
 the cause before running any tests: if audio is broken system-wide (try playing
 anything), that is your answer.
 
+**GitHub shows a red X on "Deploy gateway worker".**
+It means GitHub does not have your Cloudflare login, so it could not deploy the
+worker for you. Two choices:
+
+*Easiest — deploy from your own Mac instead.* You are already logged in there:
+
+```bash
+cd /Users/mac/Desktop/Git/hostline/worker
+npx wrangler deploy
+```
+
+*Or let GitHub do it.* Give it two values, once:
+
+1. Cloudflare dashboard → your profile icon → **API Tokens** → **Create Token**
+   → use the **"Edit Cloudflare Workers"** template → create → copy it.
+2. Get your account id: `cd worker && npx wrangler whoami`
+3. Then:
+
+```bash
+cd /Users/mac/Desktop/Git/hostline
+gh secret set CLOUDFLARE_API_TOKEN     # paste the token
+gh secret set CLOUDFLARE_ACCOUNT_ID    # paste the account id
+gh workflow run deploy-worker.yml
+```
+
+Either way the website itself is unaffected — that is a separate workflow, and
+without a worker the site simply runs in simple mode.
+
 **A test is failing after you changed something.**
 Read which test. If it's in `tests/unit/adversarial.test.ts`, do not "fix" the
 test — the rules engine has genuinely stopped protecting the booking, and that
