@@ -7,18 +7,52 @@ should be able to read this file and resume exactly where the last one stopped.
 
 ---
 
-## Standing constraint on this build
+## Published, 2026-08-26
 
-**No git operations were performed.** The operator instructed that nothing be
-committed or pushed, which overrides the build prompt's Phase 0 instruction to
-create `parshvak26/hostline` and enable Pages. Consequently:
+The standing "no git operations" constraint recorded here for the first day of
+the build has been **lifted and acted on**. The repository is
+`parshvak26/hostline`, Pages is enabled and serving from the `deploy-pages.yml`
+workflow, and the site is live:
 
-- there is no git history, no remote, and no deployment;
-- every acceptance criterion phrased as "live at the URL", "green CI", "pushed",
-  or "clean over full history" is **blocked**, not failed;
-- everything else is built, runnable, and tested locally.
+**<https://parshvak26.github.io/hostline/>**
 
-`RUNBOOK.md` Part 3 has the exact commands to publish it.
+So every acceptance criterion that read "live at the URL", "green CI" or
+"pushed" is no longer blocked. As of the last push to `main`:
+
+| Workflow | State |
+|---|---|
+| CI (secret scan, lint, typecheck, unit, worker, build+budgets, e2e ×5) | **green** |
+| Deploy to GitHub Pages | **green** |
+| Lighthouse (`workflow_dispatch`) | **green** |
+
+**The live site has been driven end to end, not just deployed.** Five specs —
+`smoke`, `happy-typed`, `diary`, `correction`, `alternatives` — were re-run
+against `https://parshvak26.github.io/hostline/` itself rather than a local
+preview: 11 tests, all passing. A stranger with the URL and no microphone
+completes a booking and is issued a reference.
+
+Two defects were fixed to get there, both described in the commits:
+
+- **The catastrophic-fallback floor stopped catching anonymous errors.** An
+  earlier fix for a Turnstile throw asked "is this error positively ours?", and
+  an error with no filename answers no — which is the common shape of a genuine
+  application failure. Inverted to ignore only errors positively attributable to
+  another origin. Five e2e runs had been red on this.
+- **Lighthouse failed `errors-in-console` on a security control doing its job.**
+  Its build was given the production gateway URL, but Lighthouse CI serves
+  `dist/` from an ephemeral localhost port, which the gateway's CORS allowlist
+  correctly refuses. The refusal was logged and graded. That build no longer
+  gets a gateway; the live origin is on the allowlist and logs nothing.
+
+`RUNBOOK.md` Part 3 has the commands, and they have now actually been run.
+
+### Still open
+
+- **Nine Dependabot PRs**, none merged. Six are GitHub Actions bumps that would
+  clear the `Node.js 20 is deprecated` annotation now on every job; three are
+  npm bumps that need judgement (`typescript` 5→7 in the worker, `wrangler` 3→4,
+  and a 15-package dev-dependency group).
+- **T-109**, the recorded conversation, still needs a microphone and a person.
 
 ---
 
@@ -80,12 +114,12 @@ Four real defects came out of writing and running the suite, all fixed:
 
 | Task | Status | Notes |
 |---|---|---|
-| T-001 Initialise repository | partial | All files present. Node 24 per plan §0 (not 20). Repo creation blocked. |
+| T-001 Initialise repository | done | All files present. Node 24 per plan §0 (not 20). `parshvak26/hostline` created and pushed. |
 | T-002 Vite + TypeScript strict | done | `base: '/hostline/'`; verified by serving the built output. |
 | T-003 Lint rules incl. engine purity | done | Proven by `tests/unit/lint-rules.test.ts`. |
 | T-004 Test scaffolding | done | Vitest with the coverage gate; Playwright across 5 profiles. |
-| T-005 CI workflow | done | `ci.yml` with parallel lint/typecheck/gitleaks/unit/worker/build/e2e jobs. Never executed on GitHub. |
-| T-006 Pages deployment | partial | `deploy-pages.yml` written; deployment blocked. |
+| T-005 CI workflow | done | `ci.yml` with parallel lint/typecheck/gitleaks/unit/worker/build/e2e jobs. **Green on GitHub.** |
+| T-006 Pages deployment | done | Live at <https://parshvak26.github.io/hostline/>, and the suite has been run against it. |
 | T-007 Design tokens and stylesheet | done | Fraunces subset to 39.6 KB. Grep check enforces §5.2. |
 | T-008 Restaurant config and validator | done | 28 tests, 12 malformed variants with distinct messages. |
 | T-009 ADR-0001 no framework | done | Plus five more ADRs. |
