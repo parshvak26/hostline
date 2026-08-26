@@ -28,7 +28,7 @@ jobs:
         run: npm run measure-latency -- --json > latency.json
         env:
           HOSTLINE_GATEWAY_URL: ${{ vars.VITE_GATEWAY_URL }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: latency
           path: latency.json

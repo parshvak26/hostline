@@ -93,7 +93,7 @@ jobs:
         run: npx vitest run tests/unit/adversarial.test.ts
       - name: Terminal booking smoke test
         run: npm run converse -- --demo --deterministic
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage
@@ -132,7 +132,7 @@ jobs:
       # Budgets from plan §15: JS <120KB gz, CSS <20KB gz, fonts <60KB,
       # prebaked audio <300KB.
       - run: node scripts/check-budgets.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
@@ -153,7 +153,7 @@ jobs:
       # Runs against the built output with the real `/hostline/` base path, so
       # a base-path regression fails here rather than on the deployed site.
       - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report
