@@ -12,3 +12,4 @@ worker/node_modules/
 worker/dist/
 .vite/
 lighthouse-report/
+.lighthouseci/

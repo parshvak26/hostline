@@ -18,8 +18,17 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      # Built at the root base path, not `/hostline/`.
+      #
+      # Lighthouse CI serves `dist/` from the root of a throwaway server, so the
+      # production build's absolute `/hostline/assets/...` URLs would every one
+      # of them 404 — which shows up as a console-errors failure and a
+      # meaningless performance score. The real base path is covered where it
+      # matters, by the end-to-end suite, which runs against the production
+      # build at the production path.
       - run: npm run build
         env:
+          VITE_BASE: /
           VITE_GATEWAY_URL: ${{ vars.VITE_GATEWAY_URL }}
           VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
       - name: Run Lighthouse CI
