@@ -86,11 +86,13 @@ export const SPEECH = {
   /**
    * The longest a turn will wait to be heard before carrying on regardless.
    *
-   * Generous — a two-sentence reply read aloud is a few seconds — but finite.
-   * Some platforms have no voices installed and never fire `onend`, and the
+   * Generous — a two-sentence reply read aloud is a few seconds — but finite,
+   * and deliberately shorter than the ten seconds a Playwright assertion waits,
+   * so a wedged speaker shows up as a slow turn rather than a failed one. Some
+   * platforms have no voices installed and never fire `onend`, and the
    * conversation must not be held hostage to whether the words came out.
    */
-  turnSpeechCeilingMs: 12_000,
+  turnSpeechCeilingMs: 8_000,
 } as const;
 
 /** Storage. */

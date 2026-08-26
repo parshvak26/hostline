@@ -223,9 +223,18 @@ export class Orchestrator {
 
     const opening = this.conversation.start();
     this.emit({ type: 'state', state: this.conversation.engineState });
-    await this.speakAll(opening.lines);
 
+    // The greeting and the microphone start together.
+    //
+    // Waiting for the agent to finish its own sentence before it will listen
+    // adds the whole length of the greeting to the time before a visitor can
+    // say anything — and on a machine whose speaker does not work, adds the
+    // entire speech ceiling. Recognition is muted while the agent talks
+    // (`speakAll`), so opening it early costs nothing and buys a microphone
+    // that is live the moment the page is.
+    const greeting = this.speakAll(opening.lines);
     await this.listen();
+    await greeting;
   }
 
   /** Start listening, if a microphone path exists. */
@@ -401,9 +410,17 @@ export class Orchestrator {
    */
   private async speakAll(lines: readonly SpokenLine[], signal?: AbortSignal): Promise<void> {
     const spoken = (async (): Promise<void> => {
-      for (const line of lines) {
-        if (signal?.aborted === true) return;
-        await this.speak(line, signal);
+      // R-25, and the reason the microphone can be opened before the agent has
+      // finished talking: recognition is deaf for as long as there is a voice
+      // coming out of the speaker.
+      this.options.input?.setMuted(true);
+      try {
+        for (const line of lines) {
+          if (signal?.aborted === true) return;
+          await this.speak(line, signal);
+        }
+      } finally {
+        this.options.input?.setMuted(false);
       }
     })();
 
