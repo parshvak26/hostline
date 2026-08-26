@@ -202,7 +202,13 @@
   async function ensureSession() {
     if (session && session.expiresAt > Date.now() + 5000) return session;
     const token = await turnstileToken();
-    if (token === null) throw new Error('Could not verify this browser with Turnstile.');
+    if (token === null) {
+      // Turnstile stalls rather than errors when it does not believe there is a
+      // person here — a real domain misconfiguration fires `error-callback`
+      // within a second or two instead. So this branch is mostly automation,
+      // an extension blocking the challenge, or a very slow network.
+      throw new Error('Could not confirm there is a person here — the challenge did not complete.');
+    }
 
     const response = await fetch(`${GATEWAY}/session`, {
       method: 'POST',
@@ -267,7 +273,13 @@
 
     try {
       const answer = await reply(messages);
-      if (answer === '') throw new Error('The host said nothing.');
+      // A turn can legitimately carry only tool calls and no prose. There is no
+      // booking engine on this page to run them against, so the turn is simply
+      // empty — worth a nudge rather than an apology.
+      if (answer === '') {
+        setStatus('The host had nothing to say to that. Try putting it another way.');
+        return;
+      }
       messages.push({ role: 'assistant', content: answer });
       addTurn('agent', answer);
       setStatus('Press the button to reply.');
