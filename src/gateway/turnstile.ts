@@ -122,7 +122,12 @@ export async function getTurnstileToken(): Promise<string | null> {
     try {
       widgetId = turnstile.render(container, {
         sitekey: PUBLIC_CONFIG.turnstileSiteKey,
-        size: 'invisible',
+        // `appearance`, not `size`. Turnstile's sizes are normal, compact and
+        // flexible — passing 'invisible' there throws, which is how the AI path
+        // silently failed to authenticate on the deployed site. Invisibility is
+        // a matter of *when* the widget appears, and `interaction-only` means
+        // "only if this visitor actually has to prove something".
+        appearance: 'interaction-only',
         callback: (token: string) => {
           clearTimeout(timer);
           finish(typeof token === 'string' && token !== '' ? token : null);
@@ -136,7 +141,17 @@ export async function getTurnstileToken(): Promise<string | null> {
           finish(null);
         },
       });
-      turnstile.execute(widgetId);
+
+      // `execute()` belongs to the `appearance: 'execute'` mode. Under
+      // `interaction-only` the widget has already started by the time render
+      // returns, so a throw here means "you did not need to ask", not "this
+      // failed" — and abandoning a widget that is already working would give up
+      // a token we are about to be handed.
+      try {
+        turnstile.execute(widgetId);
+      } catch {
+        // Already running.
+      }
     } catch {
       clearTimeout(timer);
       finish(null);
