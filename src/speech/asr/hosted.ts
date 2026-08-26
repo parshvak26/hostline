@@ -83,7 +83,12 @@ class HostedSpeechInput implements SpeechInput {
   private stream: MediaStream | null = null;
   private analyser: AnalyserNode | null = null;
   private context: AudioContext | null = null;
-  private samples: Float32Array | null = null;
+  // Explicitly backed by an ArrayBuffer, not the ArrayBufferLike this would
+  // otherwise widen to. `getFloatTimeDomainData` will not take a view that
+  // might be over a SharedArrayBuffer, and the inference that saves `vad.ts`
+  // from having to say so — `new Float32Array(n)` — is not available to a
+  // field declared ahead of its assignment.
+  private samples: Float32Array<ArrayBuffer> | null = null;
   private chunks: Blob[] = [];
   private muted = false;
   private stopping = false;
