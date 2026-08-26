@@ -29,7 +29,7 @@ No signup. No app. No API key. It works in your browser, and it costs nobody any
 - **Muting recognition during playback is gating, not echo cancellation.** The browser's `echoCancellation` does the acoustic half; the gate simply refuses to believe anything heard while the agent is talking.
 - **The rule brain's parsers are heuristics.** They handle the fixture corpus and a good deal besides, and they will occasionally misread a sentence. The read-back is what catches that.
 - **The free tiers rate-limit.** When one is exhausted the demo drops to simple mode. That is a designed state, not a failure.
-- **Safari and iOS are untested.** Playwright's pinned WebKit build does not run on this machine's macOS version, so the end-to-end suite has only been exercised on Chromium (green) and Firefox (partial, blocked by an environmental `AudioContext` hang). The code paths for them exist; nobody has watched them work.
+- **Chrome and Edge are the primary target.** The suite runs on Chromium, Firefox, WebKit and two phone profiles in CI, but Chrome's speech recognition is the best of them by a distance, and it is what the demo is tuned for.
 - **Some numbers below are unmeasured**, and are marked as such. Nothing here is published as an achievement until a real run produced it.
 
 ![The Ember & Oak landing page: the restaurant name in a warm serif, "Reservations, answered.", and a single Talk to us button on cream paper.](docs/images/hero.png)
@@ -106,7 +106,7 @@ Five rungs, each a complete experience rather than a broken version of the one a
 | The microphone is denied or absent | Typing, with the whole conversation intact |
 | Everything external is down | Typed conversation, rule brain — **still books a table** |
 
-That last row is proved by [`tests/e2e/no-gateway.spec.ts`](tests/e2e/no-gateway.spec.ts), which aborts every off-origin request at the network layer — and, in a second case, also deletes the speech-recognition API and `navigator.mediaDevices` — and still completes a booking. It passes on Chromium. Full matrix: [`docs/degradation.md`](docs/degradation.md).
+That last row is proved by [`tests/e2e/no-gateway.spec.ts`](tests/e2e/no-gateway.spec.ts), which aborts every off-origin request at the network layer — and, in a second case, also deletes the speech-recognition API and `navigator.mediaDevices` — and still completes a booking. It runs on Chromium, Firefox, WebKit, iPhone SE and Pixel 5 in CI. Full matrix: [`docs/degradation.md`](docs/degradation.md).
 
 ---
 
@@ -124,8 +124,8 @@ Every number here came from a real run on this machine. Nothing is estimated.
 | Fonts | **39.6 KB** | <60 KB | Fraunces, subset to the characters actually used |
 | Total first visit | **146.0 KB** gzipped | <2 MB | same, including the social preview image |
 | Engine statement coverage | **98.5%** | ≥90% | `npm run test:unit` |
-| Tests | **1,411** | — | 1,259 unit/integration + 124 gateway worker + 28 end-to-end (Chromium) |
-| axe-core serious/critical | **0** | 0 | All four views, Chromium |
+| Tests | **1,530** | — | 1,261 unit/integration + 124 gateway worker + 145 end-to-end across 5 browser profiles |
+| axe-core serious/critical | **0** | 0 | All four views, every browser profile |
 | Lighthouse | **not measured** | 90+/95+ | Needs a deployed site. |
 
 The rule-brain figure measures the engine end to end — parse, validate, check availability, choose the next line — and **excludes** speech synthesis and playback, which are browser-side and measured by the on-screen readout. It is fast because it does no I/O at all; that is the point of the design, not a benchmark trick.

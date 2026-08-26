@@ -320,8 +320,20 @@ export class Orchestrator {
       if (effect.type === 'offer_typing') this.emit({ type: 'offer_typing' });
     }
 
+    // What happened comes before how it sounds.
+    //
+    // The screen, the stored booking and the transcript are all settled before
+    // a single word is synthesised. Speaking is the one part of a turn that
+    // depends on a platform we do not control — a machine with no audio device,
+    // a browser with no installed voices, an OS speech service that has wedged —
+    // and none of those may be allowed to delay the visitor seeing that their
+    // table is booked.
+    //
+    // This was not academic: on Linux the CI runner's Firefox has no speech
+    // service, `speechSynthesis` never fired `onend`, and the confirmation card
+    // sat hidden behind an `await` until the watchdog fired. Twenty-three tests
+    // failed for a reason that had nothing to do with booking a table.
     this.emit({ type: 'state', state: outcome.state });
-    await this.speakAll(outcome.lines, abort.signal);
 
     if (outcome.booking !== undefined) {
       await this.options.repository.saveBooking(outcome.booking).catch(() => undefined);
@@ -329,6 +341,7 @@ export class Orchestrator {
     }
 
     await this.persistTranscript(outcome);
+    await this.speakAll(outcome.lines, abort.signal);
 
     if (outcome.outcome !== undefined) {
       this.emit({ type: 'ended', outcome: outcome.outcome });
@@ -371,11 +384,30 @@ export class Orchestrator {
 
   /* -------------------------------------------------------------- speech -- */
 
+  /**
+   * Say everything the engine required, under a hard ceiling.
+   *
+   * The ceiling is belt to the ordering's braces. Every speech path is supposed
+   * to settle — the cascade falls through its rungs, the browser adapter has its
+   * own per-utterance watchdog — but "supposed to" is doing a lot of work when
+   * the failure mode is a platform call that never returns. The turn loop is
+   * allowed to give up on being heard; it is not allowed to stop.
+   */
   private async speakAll(lines: readonly SpokenLine[], signal?: AbortSignal): Promise<void> {
-    for (const line of lines) {
-      if (signal?.aborted === true) return;
-      await this.speak(line, signal);
-    }
+    const spoken = (async (): Promise<void> => {
+      for (const line of lines) {
+        if (signal?.aborted === true) return;
+        await this.speak(line, signal);
+      }
+    })();
+
+    let ceiling: ReturnType<typeof setTimeout> | undefined;
+    const budget = new Promise<void>((resolve) => {
+      ceiling = setTimeout(resolve, SPEECH.turnSpeechCeilingMs);
+    });
+
+    await Promise.race([spoken, budget]);
+    if (ceiling !== undefined) clearTimeout(ceiling);
   }
 
   private async speak(line: SpokenLine, signal?: AbortSignal): Promise<void> {

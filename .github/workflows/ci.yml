@@ -54,6 +54,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci
+      # `npm run typecheck` also checks worker/, which needs
+      # `@cloudflare/workers-types` from the worker's own node_modules. Without
+      # this the job fails on a missing type definition rather than a type error.
+      - run: npm --prefix worker ci
       - run: npm run typecheck
 
   secrets:

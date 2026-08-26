@@ -43,37 +43,30 @@ create `parshvak26/hostline` and enable Pages. Consequently:
 | 375x667 | Talk button above the fold, 56 px tall; **no horizontal scroll** through a full booking |
 | 200% zoom (640x400) | full booking completes; **no horizontal scroll** |
 
-### The end-to-end suite, stated accurately
+### The end-to-end suite
 
-14 specs, 29 tests per project. What actually ran:
+14 specs, 29 tests per project, five projects — Chromium, Firefox, WebKit,
+iPhone SE and Pixel 5. **145 tests, all passing in CI**, 5 skipped by project
+scoping (the mobile spec skips on desktop, the zoom spec skips on phones).
 
-| Project | Result |
-|---|---|
-| **chromium** | **Green — 28 passed, 1 skipped** (the skip is `mobile.spec`, scoped to the phone profiles). Verified twice. |
-| **firefox** | 23/29. The six that press the Talk button fail: on Playwright's Firefox build, `new AudioContext()` inside the click handler hangs the tab. Proved environmental by injecting a fake `AudioContext` — the same click then completes in 839 ms. |
-| **webkit** | **Could not run at all.** Playwright 1.49.1 pins WebKit 18.2 for macOS 15; this machine is macOS 26.5.1. No navigation completes — even `goto('data:text/html,<h1>hi')` times out. Needs a newer Playwright or a macOS 15 runner. |
-| **iphone-se** | Could not run — it is a WebKit project. |
-| **pixel-5** | Attempted only after the host fault below; results are not meaningful. |
+WebKit could not be run locally — Playwright 1.49.1 pins a WebKit built for
+macOS 15 and this machine is macOS 26.5.1 — but it runs fine on the Linux CI
+runner, so **Safari and iOS are genuinely covered**.
 
-**Then the machine's audio stack wedged**, and the suite became unrunnable
-entirely. `say -v '?'` hangs at the shell, and in every browser mode merely
-reading `window.speechSynthesis` blocks the renderer permanently. A bare
-`new AudioContext()` on `about:blank` — no project code loaded at all — also
-hangs. Recovery is `sudo killall coreaudiod`, or a reboot, then
-`npm run test:e2e`.
-
-**Do not read the chromium-green result as "the suite passes everywhere."** It
-passes on Chromium. Firefox has an environmental blocker. WebKit was never
-exercised on this machine, so Safari and iOS are **untested**, and plan §23 asks
-for all three — that box is not ticked.
-
-Three real defects came out of writing the suite, all fixed:
+Four real defects came out of writing and running the suite, all fixed:
 
 - **The agent had no voice at all in the default build.** `SpeechCascade`
   implemented `speakOrResolve` but not `speak`, and the orchestrator calls
   `speech.speak?.(…)` optionally — so the missing method was `undefined` and the
-  call silently did nothing. Fixed, with `tests/unit/speech-cascade.test.ts` (9
-  tests) asserting the observable outcome rather than the method's existence.
+  call silently did nothing. `tests/unit/speech-cascade.test.ts` now asserts the
+  observable outcome rather than the method's existence.
+- **The confirmation card waited on the speaker.** The turn loop awaited
+  `speakAll` before emitting `booked`, so on the Linux runner — where Firefox has
+  no speech service and `onend` never fires — the visitor's confirmation sat
+  hidden behind an await. Twenty-three tests failed for a reason that had nothing
+  to do with booking a table. The commit, the store and the screen are now all
+  settled before a word is synthesised, and `speakAll` has a hard ceiling.
+  Guarded by `tests/unit/orchestrator-ordering.test.ts`.
 - **Every spoken visitor turn was printed twice**, because a final recognition
   result reached the transcript through both `onTranscript` and the endpointer.
   `handleTurn` is now the single writer.

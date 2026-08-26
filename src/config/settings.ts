@@ -83,6 +83,14 @@ export const SPEECH = {
    */
   minSentenceChars: 12,
   maxSentenceChars: 240,
+  /**
+   * The longest a turn will wait to be heard before carrying on regardless.
+   *
+   * Generous — a two-sentence reply read aloud is a few seconds — but finite.
+   * Some platforms have no voices installed and never fire `onend`, and the
+   * conversation must not be held hostage to whether the words came out.
+   */
+  turnSpeechCeilingMs: 12_000,
 } as const;
 
 /** Storage. */
