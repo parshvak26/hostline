@@ -91,20 +91,23 @@ function installFallback(): (message: string) => void {
    * misbehaving — is a degradation the chain already handles, and showing the
    * catastrophic panel for it replaces a working page with an apology.
    *
-   * An error with no filename is the browser's opaque cross-origin "Script
-   * error.", which is likewise not ours.
    */
-  const isOurs = (filename: string | undefined): boolean => {
+  const isThirdParty = (filename: string | undefined): boolean => {
+    // Only *positively identified* third-party code is ignored. An error with
+    // no filename is the common case for a genuine application failure — and
+    // for the browser's opaque cross-origin "Script error." — so it errs
+    // towards showing the panel. Being shown an apology you did not need beats
+    // being shown a blank page.
     if (filename === undefined || filename === '') return false;
     try {
-      return new URL(filename, location.href).origin === location.origin;
+      return new URL(filename, location.href).origin !== location.origin;
     } catch {
       return false;
     }
   };
 
   window.addEventListener('error', (event) => {
-    if (!isOurs(event.filename)) return;
+    if (isThirdParty(event.filename)) return;
     show('Something in this page stopped working.');
   });
   window.addEventListener('unhandledrejection', () => show('Something in this page stopped working.'));

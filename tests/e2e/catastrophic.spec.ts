@@ -55,3 +55,25 @@ test('an unhandled rejection reveals it too', async ({ page }) => {
     'Something in this page stopped working.',
   );
 });
+
+test('a third-party script throwing does not raise the panel over a working page', async ({ page }) => {
+  // Turnstile once threw on a parameter it had stopped accepting. The page was
+  // working perfectly — the booking path does not need Turnstile — but the
+  // throw reached `window.onerror` and replaced a live demo with an apology.
+  // The panel is the floor beneath *this application* failing, and a script on
+  // someone else's origin is not that.
+  await gotoApp(page);
+  await expect(fallbackPanel(page)).toBeHidden();
+
+  await page.evaluate(() => {
+    window.dispatchEvent(
+      new ErrorEvent('error', {
+        message: 'TurnstileError: pretend a third-party widget threw',
+        filename: 'https://challenges.cloudflare.com/turnstile/v0/api.js',
+      }),
+    );
+  });
+
+  await expect(fallbackPanel(page)).toBeHidden();
+  await expect(page.getByRole('heading', { name: 'Reservations, answered.' })).toBeVisible();
+});
