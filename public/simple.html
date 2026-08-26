@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ember &amp; Oak — voice booking, the simple version</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root {
+    --paper: #f6f1e7;
+    --ink: #241f1a;
+    --muted: #6d6357;
+    --line: #ddd2c0;
+    --accent: #7c2d12;
+    --agent: #2f2a24;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  main { width: 100%; max-width: 42rem; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.9rem; margin: 0 0 .25rem; }
+  .sub { color: var(--muted); margin: 0 0 1.75rem; }
+  button {
+    font: inherit;
+    cursor: pointer;
+    border-radius: .6rem;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: .6rem 1rem;
+  }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  #talk {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    font-size: 1.1rem;
+    padding: .95rem 1.6rem;
+    min-height: 56px;
+    width: 100%;
+  }
+  #talk[data-state="listening"] { background: #14532d; border-color: #14532d; }
+  .row { display: flex; gap: .6rem; margin-top: .75rem; flex-wrap: wrap; }
+  .row button { flex: 1 1 auto; }
+  #status { margin: .9rem 0 0; color: var(--muted); font-size: .92rem; min-height: 1.6em; }
+  #transcript {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+  }
+  .turn { padding: .6rem .85rem; border-radius: .6rem; max-width: 90%; white-space: pre-wrap; }
+  .turn--you { align-self: flex-end; background: #fff; border: 1px solid var(--line); }
+  .turn--agent { align-self: flex-start; background: #efe7d8; color: var(--agent); font-family: Georgia, serif; }
+  .turn--interim { opacity: .55; font-style: italic; }
+  form { display: flex; gap: .6rem; margin-top: 1.25rem; }
+  input[type="text"] { flex: 1; font: inherit; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: .6rem; background: #fff; color: var(--ink); }
+  footer { max-width: 42rem; width: 100%; margin-top: 2.5rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  a { color: var(--accent); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ember &amp; Oak</h1>
+  <p class="sub">Talk to the host and book a table. Speech in, AI, speech out.</p>
+
+  <button id="talk" type="button" data-state="idle">Talk to us</button>
+  <div class="row">
+    <button id="stop" type="button" disabled>Stop speaking</button>
+    <button id="reset" type="button">Start over</button>
+  </div>
+
+  <p id="status" role="status" aria-live="polite">Press the button and say when you would like to come.</p>
+
+  <div id="transcript" aria-live="polite"></div>
+
+  <form id="typed">
+    <label class="visually-hidden" for="typedInput">Type instead</label>
+    <input id="typedInput" type="text" autocomplete="off" placeholder="…or type it here" />
+    <button type="submit">Send</button>
+  </form>
+</main>
+
+<footer>
+  <p>
+    Speech recognition and the voice are Chrome's own; the host is a language model
+    behind <a href="https://github.com/parshvak26/hostline">this project's</a> gateway.
+    Nothing you say is a real booking. Chrome or Edge only — Firefox and Safari have no
+    built-in recognition, so use the typing box there.
+  </p>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  const GATEWAY = 'https://hostline-gateway.halo-voice-parshva.workers.dev';
+  const TURNSTILE_SITE_KEY = '0x4AAAAAAEclqdMgt_J-s6k9';
+  const LOCALE = 'en-IN';
+
+  const talk = document.getElementById('talk');
+  const stopBtn = document.getElementById('stop');
+  const resetBtn = document.getElementById('reset');
+  const statusEl = document.getElementById('status');
+  const transcriptEl = document.getElementById('transcript');
+  const form = document.getElementById('typed');
+  const input = document.getElementById('typedInput');
+
+  /** The conversation as the model sees it. */
+  let messages = [];
+  let session = null;          // { token, expiresAt }
+  let recognition = null;
+  let listening = false;
+  let busy = false;
+  let interimEl = null;
+
+  const setStatus = (text) => { statusEl.textContent = text; };
+
+  function addTurn(who, text, interim) {
+    const el = document.createElement('div');
+    el.className = `turn turn--${who}${interim ? ' turn--interim' : ''}`;
+    el.textContent = text;
+    transcriptEl.append(el);
+    el.scrollIntoView({ block: 'nearest' });
+    return el;
+  }
+
+  /* ------------------------------------------------------------ speaking -- */
+
+  function speak(text) {
+    const synth = window.speechSynthesis;
+    if (!synth || !text) return;
+    synth.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = LOCALE;
+    utterance.rate = 1.02;
+    // Recognition is muted while the agent talks, so the microphone does not
+    // transcribe the page's own voice back into the conversation.
+    utterance.onend = () => { stopBtn.disabled = true; };
+    stopBtn.disabled = false;
+    synth.speak(utterance);
+  }
+
+  stopBtn.addEventListener('click', () => {
+    window.speechSynthesis?.cancel();
+    stopBtn.disabled = true;
+  });
+
+  /* ------------------------------------------------------- the AI, via -- */
+  /* ------------------------------------------------------- the gateway --- */
+
+  /**
+   * A Turnstile token, or null.
+   *
+   * `appearance: 'interaction-only'` rather than a size — Turnstile's sizes are
+   * normal/compact/flexible, and passing 'invisible' there throws. The widget
+   * shows itself only if this visitor actually has to prove something.
+   */
+  function turnstileToken() {
+    return new Promise((resolve) => {
+      const done = (value) => { clearTimeout(timer); cleanup(); resolve(value); };
+      const timer = setTimeout(() => done(null), 15000);
+      let widgetId = null;
+      const container = document.createElement('div');
+      container.className = 'visually-hidden';
+      document.body.append(container);
+      const cleanup = () => {
+        try { if (widgetId !== null) window.turnstile.remove(widgetId); } catch { /* already gone */ }
+        container.remove();
+      };
+
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.onerror = () => done(null);
+      script.onload = () => {
+        try {
+          widgetId = window.turnstile.render(container, {
+            sitekey: TURNSTILE_SITE_KEY,
+            appearance: 'interaction-only',
+            callback: (token) => done(token || null),
+            'error-callback': () => done(null),
+            'timeout-callback': () => done(null),
+          });
+        } catch { done(null); }
+      };
+      document.head.append(script);
+    });
+  }
+
+  async function ensureSession() {
+    if (session && session.expiresAt > Date.now() + 5000) return session;
+    const token = await turnstileToken();
+    if (token === null) throw new Error('Could not verify this browser with Turnstile.');
+
+    const response = await fetch(`${GATEWAY}/session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ turnstileToken: token }),
+    });
+    if (!response.ok) throw new Error(`The gateway refused a session (${response.status}).`);
+    session = await response.json();
+    return session;
+  }
+
+  /**
+   * One turn. Streams SSE frames and returns the reply text.
+   *
+   * The system prompt, the restaurant's hours and the house rules all live on
+   * the gateway — this page sends only the conversation so far.
+   */
+  async function reply(history) {
+    const { token } = await ensureSession();
+    const response = await fetch(`${GATEWAY}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ messages: history, locale: LOCALE }),
+    });
+    if (!response.ok || response.body === null) {
+      throw new Error(`The host could not answer (${response.status}).`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let text = '';
+
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split(/\r?\n\r?\n/);
+      buffer = parts.pop() ?? '';
+      for (const part of parts) {
+        const event = /^event:\s*(.+)$/m.exec(part)?.[1]?.trim();
+        const data = /^data:\s*(.+)$/m.exec(part)?.[1];
+        if (event === 'token' && data !== undefined) {
+          try { text += JSON.parse(data).text ?? ''; } catch { /* partial */ }
+        } else if (event === 'error') {
+          throw new Error('The host stopped mid-sentence.');
+        }
+      }
+    }
+    return text.trim();
+  }
+
+  /* ----------------------------------------------------------- one turn -- */
+
+  async function handle(said) {
+    if (busy || !said) return;
+    busy = true;
+    talk.disabled = true;
+    addTurn('you', said);
+    messages.push({ role: 'user', content: said });
+    setStatus('Thinking…');
+
+    try {
+      const answer = await reply(messages);
+      if (answer === '') throw new Error('The host said nothing.');
+      messages.push({ role: 'assistant', content: answer });
+      addTurn('agent', answer);
+      setStatus('Press the button to reply.');
+      speak(answer);
+    } catch (error) {
+      addTurn('agent', 'Sorry — I could not reach the host just then. Try again, or type instead.');
+      setStatus(error instanceof Error ? error.message : 'Something went wrong.');
+    } finally {
+      busy = false;
+      talk.disabled = false;
+    }
+  }
+
+  /* --------------------------------------------------------- hearing you -- */
+
+  const Recognition = window.SpeechRecognition ?? window.webkitSpeechRecognition;
+
+  function startListening() {
+    if (Recognition === undefined) {
+      setStatus('This browser has no speech recognition. Use the typing box below.');
+      input.focus();
+      return;
+    }
+    window.speechSynthesis?.cancel();
+
+    recognition = new Recognition();
+    recognition.lang = LOCALE;
+    recognition.interimResults = true;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      listening = true;
+      talk.dataset.state = 'listening';
+      talk.textContent = 'Listening — tap to stop';
+      setStatus('Listening.');
+    };
+
+    recognition.onresult = (event) => {
+      let interim = '';
+      let final = '';
+      for (let i = event.resultIndex; i < event.results.length; i += 1) {
+        const result = event.results[i];
+        if (result.isFinal) final += result[0].transcript;
+        else interim += result[0].transcript;
+      }
+      if (interim !== '') {
+        if (interimEl === null) interimEl = addTurn('you', interim, true);
+        else interimEl.textContent = interim;
+      }
+      if (final.trim() !== '') {
+        interimEl?.remove();
+        interimEl = null;
+        void handle(final.trim());
+      }
+    };
+
+    recognition.onerror = (event) => {
+      interimEl?.remove();
+      interimEl = null;
+      setStatus(
+        event.error === 'not-allowed'
+          ? 'The microphone was refused. Type instead.'
+          : `Recognition stopped (${event.error}). Try again, or type.`,
+      );
+    };
+
+    recognition.onend = () => {
+      listening = false;
+      recognition = null;
+      talk.dataset.state = 'idle';
+      talk.textContent = 'Talk to us';
+      interimEl?.remove();
+      interimEl = null;
+    };
+
+    try { recognition.start(); } catch { /* already started */ }
+  }
+
+  talk.addEventListener('click', () => {
+    if (listening) recognition?.stop();
+    else startListening();
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const said = input.value.trim();
+    input.value = '';
+    void handle(said);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    window.speechSynthesis?.cancel();
+    recognition?.stop();
+    messages = [];
+    transcriptEl.replaceChildren();
+    setStatus('Start over. Press the button and say when you would like to come.');
+  });
+
+  if (Recognition === undefined) {
+    setStatus('No speech recognition in this browser — type below, it works the same.');
+  }
+})();
+</script>
+</body>
+</html>
